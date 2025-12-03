@@ -2,365 +2,369 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Seoul Ski Trip 2025</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Seoul 2025 Ski Trip</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #F3F4F6; padding-bottom: 80px; }
-        .card-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-        .weather-badge { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(4px); }
-        .tag-must-eat { background-color: #FEF3C7; color: #D97706; }
-        .tag-must-buy { background-color: #D1FAE5; color: #059669; }
-        .tag-transport { background-color: #DBEAFE; color: #2563EB; }
+        :root {
+            --primary: #0F172A;
+            --accent: #3B82F6;
+            --highlight: #F97316;
+            --bg: #F8FAFC;
+            --naver: #03C75A;
+            --exit: #F59E0B;
+        }
+
+        body { 
+            font-family: 'Noto Sans TC', 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            padding-bottom: 110px;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 卡片特效 */
+        .app-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid #F1F5F9;
+            overflow: hidden;
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            margin-bottom: 16px;
+        }
+        .app-card:active { transform: scale(0.98); }
+
+        /* 交通轉乘卡 */
+        .transit-card {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-left: 4px solid #3B82F6;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .transit-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #E2E8F0;
+        }
+        .transit-line:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .line-badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 4px;
+            margin-right: 8px;
+            flex-shrink: 0;
+            min-width: 45px;
+            text-align: center;
+        }
+        .line-1 { background-color: #0052A4; }
+        .line-2 { background-color: #00A84D; }
+        .line-3 { background-color: #EF7C1C; }
+        .line-4 { background-color: #00A5DE; }
+        .line-5 { background-color: #996CAC; }
+        .line-6 { background-color: #CD7C2F; }
+        .line-9 { background-color: #BDB092; }
+        .line-arex { background-color: #0090D2; }
+        .line-walk { background-color: #94A3B8; }
+
+        /* 出口標籤 */
+        .exit-badge {
+            background-color: var(--exit);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 99px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        /* 深夜補給卡 */
+        .snack-card {
+            background: linear-gradient(to right, #1E1B4B, #312E81);
+            color: #E0E7FF;
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #4338CA;
+            position: relative;
+            overflow: hidden;
+        }
+        .snack-card::after {
+            content: '\f2e7';
+            font-family: "Font Awesome 6 Free"; 
+            font-weight: 900;
+            position: absolute;
+            right: -10px; bottom: -20px;
+            font-size: 80px;
+            opacity: 0.1;
+            color: white;
+            transform: rotate(-15deg);
+        }
+
+        /* 探索卡片 */
+        .discovery-card {
+            background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.3);
+        }
+        .discovery-card::after {
+            content: '';
+            position: absolute;
+            top: -50px; right: -50px;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .discovery-tag {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        /* 登機證 */
+        .boarding-pass {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+            border: 1px solid #E2E8F0;
+        }
+        .boarding-pass::before, .boarding-pass::after {
+            content: '';
+            position: absolute;
+            top: 68%;
+            width: 20px;
+            height: 20px;
+            background-color: var(--bg);
+            border-radius: 50%;
+            z-index: 10;
+            border: 1px solid #E2E8F0;
+        }
+        .boarding-pass::before { left: -12px; border-right-color: transparent; border-bottom-color: transparent; transform: rotate(45deg); }
+        .boarding-pass::after { right: -12px; border-left-color: transparent; border-top-color: transparent; transform: rotate(45deg); }
+        
+        .pass-top { padding: 24px 24px 30px 24px; }
+        .pass-bottom { 
+            background: #F1F5F9; 
+            padding: 16px 24px; 
+            border-top: 2px dashed #CBD5E1;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* 翻譯卡片 */
+        .trans-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 10px 4px;
+        }
+        .trans-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px 16px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #E2E8F0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .trans-card:active { transform: scale(0.96); border-color: var(--accent); background-color: #F8FAFC; }
+        .trans-ko { font-size: 1.15rem; font-weight: 900; color: #0F172A; margin-bottom: 6px; line-height: 1.3; }
+        .trans-pron { font-size: 0.7rem; font-weight: 800; color: var(--highlight); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; font-family: 'Inter', sans-serif; }
+        .trans-zh { font-size: 0.85rem; color: #64748B; font-weight: 600; }
+
+        /* Checkbox & Accordion styles ... */
+        .check-item { display: flex; align-items: center; padding: 12px 16px; background: white; border-radius: 12px; margin-bottom: 8px; border: 1px solid #F1F5F9; transition: all 0.2s; justify-content: space-between; }
+        .check-item.checked { background: #F8FAFC; opacity: 0.7; }
+        .check-item.checked .item-text { text-decoration: line-through; color: #94A3B8; }
+        .checkbox-custom { width: 20px; height: 20px; border: 2px solid #CBD5E1; border-radius: 6px; margin-right: 12px; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.2s; flex-shrink: 0; }
+        .check-item.checked .checkbox-custom { background: #3B82F6; border-color: #3B82F6; }
+        .accordion-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .active-card .accordion-content { max-height: 800px; opacity: 1; padding-top: 16px; margin-top: 16px; border-top: 1px solid #F1F5F9; }
+        .chevron { transition: transform 0.3s; }
+        .active-card .chevron { transform: rotate(180deg); }
+        .nav-pill { color: #94A3B8; transition: all 0.2s; }
+        .nav-pill.active { color: #0F172A; }
+        .nav-pill.active .icon-box { background-color: #EFF6FF; color: #2563EB; box-shadow: 0 4px 10px rgba(37,99,235,0.15); }
+        .icon-box { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 4px; transition: all 0.2s; }
+        .tag { font-size: 0.65rem; padding: 3px 8px; border-radius: 6px; font-weight: 700; margin-right: 4px; display: inline-block; }
+        .tag-blue { background: #EFF6FF; color: #2563EB; }
+        .tag-orange { background: #FFF7ED; color: #EA580C; }
+        .tag-red { background: #FEF2F2; color: #DC2626; }
+        .tag-slate { background: #F1F5F9; color: #475569; }
     </style>
 </head>
 <body>
 
-    <div class="sticky top-0 z-50 bg-white shadow-sm">
-        <div class="flex justify-between items-center p-4">
-            <h1 class="text-xl font-bold text-gray-800">SEOUL 2025 🇰🇷</h1>
-            <div class="text-xs text-gray-500" id="weather-header">首爾 -2°C ☀️</div>
-        </div>
-        <div class="flex overflow-x-auto hide-scrollbar px-2 pb-2 space-x-2" id="date-nav">
-            </div>
-    </div>
-
-    <div id="app-content" class="p-4 space-y-4">
-        </div>
-
-    <div class="fixed bottom-0 w-full bg-white border-t border-gray-200 flex justify-around items-center py-3 z-50 text-xs text-gray-500 pb-safe">
-        <button onclick="switchTab('itinerary')" class="flex flex-col items-center space-y-1 w-full text-blue-600 active-tab" id="btn-itinerary">
-            <i class="fas fa-map-marked-alt text-lg"></i>
-            <span>行程</span>
-        </button>
-        <button onclick="switchTab('accounting')" class="flex flex-col items-center space-y-1 w-full" id="btn-accounting">
-            <i class="fas fa-calculator text-lg"></i>
-            <span>記帳</span>
-        </button>
-        <button onclick="switchTab('tools')" class="flex flex-col items-center space-y-1 w-full" id="btn-tools">
-            <i class="fas fa-suitcase text-lg"></i>
-            <span>資訊</span>
-        </button>
+    <div id="header-container" class="sticky top-0 z-50 transition-all duration-300"></div>
+    <div id="main-content" class="px-5 py-4 min-h-screen"></div>
+    <div class="fixed bottom-6 left-5 right-5 h-[76px] bg-white/95 backdrop-blur-md rounded-3xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.15)] border border-slate-100 flex justify-around items-center px-2 z-50">
+        <button onclick="switchTab('itinerary')" id="nav-itinerary" class="nav-pill active flex flex-col items-center w-1/4"><div class="icon-box"><i class="fas fa-map-location-dot"></i></div><span class="text-[10px] font-bold">行程</span></button>
+        <button onclick="switchTab('accounting')" id="nav-accounting" class="nav-pill flex flex-col items-center w-1/4"><div class="icon-box"><i class="fas fa-wallet"></i></div><span class="text-[10px] font-bold">記帳</span></button>
+        <button onclick="switchTab('translate')" id="nav-translate" class="nav-pill flex flex-col items-center w-1/4"><div class="icon-box"><i class="fas fa-language"></i></div><span class="text-[10px] font-bold">翻譯</span></button>
+        <button onclick="switchTab('tools')" id="nav-tools" class="nav-pill flex flex-col items-center w-1/4"><div class="icon-box"><i class="fas fa-suitcase"></i></div><span class="text-[10px] font-bold">工具</span></button>
     </div>
 
     <script>
-        // --- DATA ---
         const tripData = {
-            "2025-12-21": [
-                { type: "transport", time: "18:15", title: "飛往首爾", subtitle: "Scoot TR896 (T1)", desc: "預計抵達仁川 21:45。行李直掛。", tags: ["飛行 2h30m"] },
-                { type: "transport", time: "22:30", title: "前往市區", subtitle: "機場快線 AREX / 巴士", desc: "建議搭乘 AREX 直達首爾站轉 1 號線至清涼里，或搭乘機場巴士 6002。", highlight: "末班車注意：AREX直達車末班約 22:48", subway: "ICN ➜ 首爾站 (AREX) ➜ 清涼里站 (1號線)" },
-                { type: "hotel", time: "23:50", title: "入住飯店", subtitle: "Hotel The Designers Cheongnyangni", desc: "Agoda 訂單: 1633690442。位於清涼里站附近。", tags: ["重要代號"] },
-                { type: "food", time: "00:00", title: "深夜食堂", subtitle: "清涼里站周邊", desc: "車站附近有許多布帳馬車(路邊攤)。", tags: ["必吃: 魚板湯", "必吃: 辣炒年糕"] }
-            ],
-            "2025-12-22": [
-                { type: "transport", time: "07:00", title: "集合出發", subtitle: "清涼里火車站 Olive Young 前", desc: "切勿遲到！07:25 火車準時發車。", tags: ["早起注意"] },
-                { type: "activity", time: "11:05", title: "抵達 High 1 滑雪場", subtitle: "江原道", desc: "挑選雪衣、領取裝備。High 1 是韓國雪質最好的雪場之一。", tags: ["攻略: 先試穿尺寸", "現金付尾款"] },
-                { type: "activity", time: "12:50", title: "滑雪課程 Day 1", subtitle: "下午場", desc: "初學者基礎教學。記得隨時補充水分。", tags: ["注意保暖"] },
-                { type: "hotel", time: "16:30", title: "Ski House 入住", subtitle: "休息時間", desc: "自由活動。", tags: [] },
-                { type: "activity", time: "18:30", title: "夜間滑雪", subtitle: "Night Ski", desc: "體驗與白天完全不同的滑雪氛圍。", tags: ["拍照最美時段"] }
-            ],
-            "2025-12-23": [
-                { type: "activity", time: "09:00", title: "滑雪課程 Day 2", subtitle: "上午場", desc: "進階技巧練習。12:00 結束課程。", tags: [] },
-                { type: "activity", time: "13:00", title: "自由練習", subtitle: "Free Time", desc: "享受 High 1 的超長滑雪道。也可以去搭乘觀光纜車。", tags: ["必去: 山頂咖啡廳"] },
-                { type: "food", time: "18:00", title: "晚餐時光", subtitle: "度假村內 / 附近", desc: "可以嘗試韓式烤肉補充體力。", tags: ["必吃: 韓牛", "必點: 大醬湯"] },
-                { type: "activity", time: "18:30", title: "夜間滑雪", subtitle: "Night Ski", desc: "把握最後一晚的滑雪時光。", tags: [] }
-            ],
-            "2025-12-24": [
-                { type: "other", time: "08:20", title: "退房", subtitle: "Mountain Ski House", desc: "行李整理好，準備最後半天的滑雪。", tags: ["退房"] },
-                { type: "activity", time: "09:00", title: "滑雪課程 Day 3", subtitle: "最終場", desc: "享受最後的雪地時光。", tags: [] },
-                { type: "transport", time: "15:45", title: "歸還裝備 & 集合", subtitle: "Mountain Ski House 前", desc: "16:20 巴士準時發車回首爾。", tags: ["準時集合"] },
-                { type: "transport", time: "19:45", title: "抵達首爾", subtitle: "明洞站 / 新村站", desc: "建議在明洞下車，晚餐選擇多且換錢方便。", subway: "可轉乘 4號線 (明洞) 或 2號線 (新村)" },
-                { type: "food", time: "20:30", title: "聖誕夜晚餐", subtitle: "明洞/新村", desc: "平安夜首爾人潮眾多，建議提早找餐廳。", tags: ["必吃: 一隻雞", "必吃: 春川辣炒雞"] }
-            ],
-            "2025-12-25": [
-                { type: "activity", time: "10:00", title: "聖誕節 Free Time", subtitle: "首爾市區", desc: "待安排。建議：汝矣島現代百貨看聖誕裝飾，或弘大逛街。", tags: ["待安排"] }
-            ],
-             "2025-12-26": [
-                { type: "activity", time: "10:00", title: "首爾 Free Time", subtitle: "首爾市區", desc: "待安排。建議：景福宮韓服體驗，北村韓屋村。", tags: ["待安排"] }
-            ],
-             "2025-12-27": [
-                { type: "activity", time: "10:00", title: "最後衝刺", subtitle: "購物行程", desc: "樂天超市採買伴手禮 (海苔, 泡麵, 零食)。", tags: ["必買: HBAF杏仁果"] },
-                { type: "transport", time: "20:00", title: "前往機場", subtitle: "AREX / 巴士", desc: "航班 23:00 起飛，建議 20:30 前抵達機場櫃檯。", subway: "首爾站 ➜ ICN (AREX 直達)" },
-                { type: "transport", time: "23:00", title: "飛往台北", subtitle: "Scoot TR897", desc: "預計 12/28 00:45 抵達桃園 T1。行李 50kg。", tags: ["回程"] }
-            ],
+            "2025-12-21": {
+                title: "DAY 1 / 抵達首爾",
+                subtitle: "Airport to Cheongnyangni",
+                weather: { t: "4°C", i: "fa-cloud-moon", tip: "微冷，建議穿著防風外套" },
+                discovery: {
+                    title: "清涼里的老派浪漫",
+                    desc: "清涼里是通往江原道的鐵路樞紐，這裡有復古的傳統市場。推薦去京東市場尋寶！",
+                    spots: [{ name: "清涼里奶奶冷麵", type: "必吃", desc: "著名超辣冷麵，在市場巷弄內。" }, { name: "京東市場星巴克1960", type: "打卡", desc: "廢棄老劇院改建的超復古咖啡廳。" }]
+                },
+                items: [
+                    { type: "flight", airline: "Scoot 酷航", code: "TR896", from: "TPE", fromCity: "台北桃園", fromTime: "18:15", fromTerm: "T1", to: "ICN", toCity: "首爾仁川", toTime: "21:45", toTerm: "T1", bag: "35kg", gate: "--" },
+                    { type: "transport", time: "22:40", title: "機場前往清涼里", sub: "AREX + 地鐵1號線", tags: ["最快路線"], desc: "入境後跟隨黃色文字「Airport Railroad」指標移動。", tips: "AREX直達車末班約 22:48，請務必把握時間。若趕不上，可改搭 6002 號機場巴士。" },
+                    { type: "transit", from: "仁川機場 T1", to: "清涼里站", steps: [{ line: "line-arex", name: "AREX 機場快線", dir: "往 首爾站 (終點)", desc: "直達車 (0中途站)", time: "43分鐘" }, { line: "line-1", name: "1號線", dir: "往 逍遙山/清涼里", desc: "首爾站轉乘 (搭乘6站)", time: "18分鐘" }] },
+                    { type: "hotel", time: "00:10", title: "入住 Check-in", sub: "Hotel The Designers", address: "226 Wangsan-ro, Dongdaemun-gu, Seoul", mapQuery: "호텔더디자이너스청량리", tags: ["Agoda: 1633690442"], exit: "4號出口", desc: "位於清涼里站 4 號出口，步行約 2 分鐘即達。", tips: "飯店樓下有便利商店，建議先買好隔天早餐與水，因為明天集合時間很早。" },
+                    { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "GS25 便利商店", desc: "就在飯店大樓 1樓 或緊鄰的巷子，買水、早餐飯糰。" }, { name: "清涼里炸雞胡同", desc: "傳統市場內有著名的炸雞街，營業至深夜，推薦「南原炸雞」。" }, { name: "布帳馬車 (路邊攤)", desc: "車站前廣場通常有魚板湯、辣炒年糕攤販。" } ] }
+                ]
+            },
+            "2025-12-22": {
+                title: "DAY 2 / 前往雪場",
+                subtitle: "High 1 Resort",
+                weather: { t: "-5°C", i: "fa-snowflake", tip: "極冷，請穿發熱衣+雪衣" },
+                discovery: { title: "從煤礦到雪場", desc: "High 1 所在的古汗邑曾是繁榮的煤礦村。這裡的韓牛和野菜(Gondre)非常有名。", spots: [{ name: "古汗市場 (Gohan Market)", type: "美食", desc: "距離度假村車程約10分鐘，有便宜的烤肉店和傳統湯飯。" }] },
+                items: [
+                    { type: "transport", time: "07:00", title: "集合 (切勿遲到)", sub: "清涼里站 Olive Young 前", desc: "請在火車站內的 Olive Young 前集合。領隊會在此點名。", tags: ["早起注意"], tips: "7:25 火車準時發車，逾時不候。" },
+                    { type: "transport", time: "07:25", title: "火車出發", sub: "前往舍北站", desc: "搭乘火車前往江原道，車程約 3.5 小時，可在車上補眠。", tags: ["車程 3.5hr"] },
+                    { type: "transport", time: "10:55", title: "抵達舍北火車站", sub: "轉乘接駁", desc: "抵達 Sabuk Station，轉乘巴士前往 High 1 滑雪場。", },
+                    { type: "activity", time: "11:05", title: "抵達 High 1", sub: "滑雪度假村", desc: "抵達 Mountain Ski House。", address: "265 High1-gil, Sabuk-eup, Jeongseon-gun", mapQuery: "하이원리조트 마운틴스키하우스" },
+                    { type: "activity", time: "11:10", title: "挑選滑雪衣", sub: "租借裝備", desc: "挑選適合尺寸的雪衣、雪褲。記得檢查口袋拉鍊是否正常。", tags: ["租借"] },
+                    { type: "food", time: "11:40", title: "午餐 / 休息", sub: "自由用餐", desc: "在滑雪場附近或餐廳簡單用餐，補充體力。", },
+                    { type: "activity", time: "12:30", title: "領取裝備 & 付尾款", sub: "Ski House", desc: "領取滑雪板、雪鞋。**同時需以現金支付尾款**。", tags: ["準備現金"], tips: "需要 500韓元硬幣使用置物櫃。" },
+                    { type: "activity", time: "12:50", title: "滑雪課程開始", sub: "Day 1 課程", desc: "教練教學：穿脫裝備、安全跌倒、站起、基礎煞車 (Pizza)。", tags: ["教學 3hr"] },
+                    { type: "hotel", time: "16:30", title: "入住 Ski House", sub: "Check-in", address: "265 High1-gil, Sabuk-eup, Jeongseon-gun", mapQuery: "하이원리조트 마운틴콘도", desc: "辦理入住手續，將行李放入房間。", },
+                    { type: "activity", time: "18:30", title: "夜間滑雪", sub: "Night Ski", desc: "自由滑雪時間。開放至 22:00。", tags: ["開放至 22:00"] },
+                    { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "Mountain Condo 便利商店", desc: "Condo B1 通常有 CU 或 GS25。" }, { name: "古汗九孔炭市場", desc: "搭計程車或接駁車下山，宵夜一級戰區，有烤肉和炸雞。" }, { name: "外送炸雞", desc: "可請櫃檯幫忙叫 Pelicana 或 Mexicana 炸雞 (需付外送費)，在 Lobby 取餐。" } ] }
+                ]
+            },
+            "2025-12-23": {
+                title: "DAY 3 / 全日滑雪",
+                subtitle: "Ski & Relax",
+                weather: { t: "-8°C", i: "fa-snowflake", tip: "山頂風大，務必戴護目鏡" },
+                discovery: { title: "雲端上的咖啡廳", desc: "High 1 擁有韓國海拔最高的旋轉咖啡廳 (1340m)。", spots: [{ name: "Top of the Top", type: "景點", desc: "搭纜車上山頂，360度欣賞雪景。" }, { name: "古汗邑烤肉", type: "晚餐", desc: "晚餐建議搭接駁車下山去古汗邑吃韓式烤肉。" }] },
+                items: [
+                    { type: "activity", time: "09:00", title: "滑雪課程 Day 2", sub: "進階技巧", desc: "早上課程開始。練習重心轉移與 S 型轉彎。", tags:["教學 3hr"] },
+                    { type: "food", time: "12:00", title: "課程結束 & 午餐", sub: "Ski House", desc: "結束所有教學課程。午餐時間。", tags:["休息"] },
+                    { type: "activity", time: "13:00", title: "自由練習 / 觀光", sub: "Free Time", desc: "下午 13:00 ~ 15:45 為自由時間。", tags:["自由活動"] },
+                    { type: "activity", time: "13:30", title: "Top of the Top", sub: "觀光纜車推薦", desc: "若不滑雪，強烈建議搭纜車至 1340m 山頂旋轉咖啡廳拍照。", tags:["必去"] },
+                    { type: "activity", time: "18:30", title: "夜間滑雪", sub: "Night Ski", desc: "第二天夜滑。把握最後一晚的雪地時光。", tags:["開放至 22:00"] },
+                    { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "Mountain Condo 便利商店", desc: "買些韓國零食、馬格利酒回房間慶祝。" }, { name: "古汗市場", desc: "若想吃熱食，市場內的湯飯是絕佳選擇。" } ] }
+                ]
+            },
+            "2025-12-24": {
+                title: "DAY 4 / 返回首爾",
+                subtitle: "Christmas Eve",
+                weather: { t: "-2°C", i: "fa-tree", tip: "平安夜人多，注意保暖" },
+                discovery: { title: "平安夜的首爾", desc: "首爾的聖誕氣氛非常濃厚，尤其是明洞教堂和新世界百貨的燈飾。", spots: [{ name: "麻浦烤腸城", type: "必吃", desc: "弘大排隊名店，必吃蔬菜烤腸！" }, { name: "明洞聖堂", type: "景點", desc: "平安夜最美的地方。" }] },
+                items: [
+                    { type: "hotel", time: "08:20", title: "退房 Check-out", sub: "整理行李", desc: "11:00 前必須完全退房。", tags:["退房"] },
+                    { type: "activity", time: "09:00", title: "自由滑雪 / 課程", sub: "最後衝刺", desc: "Day 3 課程或自由練習時間。", tags:["最後滑雪"] },
+                    { type: "activity", time: "15:45", title: "歸還裝備 & 集合", sub: "Mountain Ski House", desc: "歸還所有租借裝備。在 Ski House 前集合。", tags:["集合"] },
+                    { type: "transport", time: "16:20", title: "巴士回首爾", sub: "準時發車", desc: "搭乘巴士返回首爾。車程約 3.5 小時。", tags:["回程"] },
+                    { type: "transport", time: "19:45", title: "抵達 明洞站", sub: "解散", desc: "巴士停靠明洞站。在此下車轉搭地鐵去吃晚餐。", tags:["抵達"] },
+                    { type: "transit", from: "明洞", to: "弘大入口 (晚餐)", steps: [ { line: "line-4", name: "4號線", dir: "往 東大門歷史公園", desc: "明洞站 ➜ 東大門歷史公園站", time: "4分鐘" }, { line: "line-2", name: "轉乘 2號線", dir: "往 弘大入口", desc: "東大門歷史公園 ➜ 弘大入口站 (8站)", time: "17分鐘" } ] },
+                    { type: "food", time: "20:30", title: "晚餐：麻浦烤腸城", sub: "弘大入口站", exit: "2號出口", desc: "超人氣烤腸店！推薦點『蔬菜烤腸』。吃完記得加點炒飯！", naverLink: "https://naver.me/59voptcA", tips: "人潮眾多，建議提早前往。", tags: ["必吃", "平安夜大餐"] },
+                    { type: "transit", from: "弘大入口 (餐廳)", to: "合井站 (Airbnb)", steps: [ { line: "line-2", name: "2號線", dir: "往 合井/堂山", desc: "弘大入口 ➜ 合井站 (1站)", time: "3分鐘", exit: "7號出口" }, { line: "line-walk", name: "步行", dir: "前往住宿", desc: "步行約 10 分鐘抵達", time: "10分鐘" } ] },
+                    { type: "hotel", time: "22:30", title: "入住 Airbnb", sub: "Host: Dada", address: "52 Tojeong-ro 11-gil, Mapo-gu, Seoul", mapQuery: "서울 마포구 토정로11길 52", desc: "從弘大/合井區域前往住宿處。Check-in 15:00 後。", tips: "密碼鎖入住，請確認是否收到房東密碼。" }
+                ]
+            },
+            "2025-12-25": { 
+                title: "DAY 5 / 聖誕快樂", subtitle: "Free Time", weather: { t: "0°C", i: "fa-gift", tip: "適合穿大衣，圍巾必備" }, 
+                items: [
+                    { type: "activity", time: "10:00", title: "首爾自由行", sub: "推薦行程", desc: "推薦：汝矣島現代百貨 (The Hyundai Seoul) 看聖誕裝飾，或弘大逛街。" },
+                    { type: "transit", from: "合井站 (Airbnb)", to: "汝矣島 (The Hyundai)", steps: [ { line: "line-2", name: "2號線", dir: "往 堂山 (Dangsan)", desc: "合井 ➜ 堂山站 (1站)", time: "3分鐘" }, { line: "line-9", name: "轉乘 9號線", dir: "往 汝矣島/綜合運動場", desc: "堂山 ➜ 汝矣島站 (2站)", time: "4分鐘", exit: "3號出口" }, { line: "line-walk", name: "步行", dir: "地下連通", desc: "有地下道直通百貨", time: "10分鐘" } ] }
+                ] 
+            },
+            "2025-12-26": { 
+                title: "DAY 6 / 文化巡禮", subtitle: "Seoul City", weather: { t: "2°C", i: "fa-sun", tip: "天氣轉晴，適合戶外拍照" }, 
+                items: [
+                    { type: "activity", time: "10:00", title: "首爾自由行", sub: "推薦行程", desc: "推薦：北村韓屋村、三清洞、景福宮。" },
+                    { type: "transit", from: "合井站 (Airbnb)", to: "安國站 (北村)", steps: [ { line: "line-6", name: "6號線", dir: "往 藥水 (Yaksu)", desc: "合井 ➜ 藥水站 (11站)", time: "22分鐘" }, { line: "line-3", name: "轉乘 3號線", dir: "往 安國/景福宮", desc: "藥水 ➜ 安國站 (3站)", time: "6分鐘", exit: "2號出口" } ] }
+                ] 
+            },
+            "2025-12-27": {
+                title: "DAY 7 / 滿載而歸", subtitle: "Bye Seoul", weather: { t: "3°C", i: "fa-plane", tip: "搭機請穿著舒適寬鬆" },
+                discovery: { title: "最後採買清單", desc: "離開前在首爾站把伴手禮一次買齊！", spots: [ { name: "HBAF 杏仁果", type: "必買", desc: "蜂蜜奶油、芥末口味最經典。" }, { name: "海苔 & 泡麵", type: "必買", desc: "辛拉麵、安城湯麵記得買整箱直接託運。" } ] },
+                items: [
+                    { type: "hotel", time: "11:00", title: "退房 Check-out", sub: "Airbnb", desc: "11:00 前退房。帶著行李前往首爾站。", tags: ["退房"] },
+                    { type: "transit", from: "合井站 (Airbnb)", to: "首爾站", steps: [ { line: "line-2", name: "2號線", dir: "往 市廳 (City Hall)", desc: "合井 ➜ 市廳站 (5站)", time: "11分鐘" }, { line: "line-1", name: "轉乘 1號線", dir: "往 首爾站", desc: "市廳 ➜ 首爾站 (1站)", time: "2分鐘", exit: "1號出口" } ] },
+                    { type: "shopping", time: "14:00", title: "樂天超市", sub: "首爾站店", desc: "最後採買伴手禮。可現場退稅。<br><span class=\"text-xs text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded mt-2 inline-block\"><i class=\"fas fa-subway mr-1\"></i>首爾站 1號出口直達</span>", tags: ["必買"] },
+                    { type: "transport", time: "20:00", title: "前往機場", sub: "AREX 機場快線", desc: "從樂天超市採買完，直接進首爾站搭乘 AREX 直達車前往仁川機場。" },
+                    { type: "flight", airline: "Scoot 酷航", code: "TR897", from: "ICN", fromCity: "首爾仁川", fromTime: "23:00", fromTerm: "T1", to: "TPE", toCity: "台北桃園", toTime: "00:45", toTerm: "T1", bag: "50kg", gate: "--" }
+                ]
+            }
         };
 
-        const toolsData = {
-            flight: [
-                { dir: "去程", code: "TR896", date: "12/21 (日)", time: "18:15 - 21:45", airport: "TPE T1 -> ICN", bag: "35kg" },
-                { dir: "回程", code: "TR897", date: "12/27 (六)", time: "23:00 - 00:45(+1)", airport: "ICN -> TPE T1", bag: "50kg" }
-            ],
-            stay: [
-                { name: "The Designers Cheongnyangni", date: "12/21-12/22", code: "Agoda: 1633690442", note: "清涼里站" },
-                { name: "High 1 Ski Resort", date: "12/22-12/24", code: "Tour Booking", note: "滑雪度假村" }
-            ],
-            emergency: [
-                { name: "報警", number: "112" },
-                { name: "火警/急救", number: "119" },
-                { name: "韓國旅遊諮詢熱線", number: "1330 (有中文)" },
-                { name: "外交部急難救助", number: "+82-10-9080-2761" }
-            ]
-        };
-
-        let expenses = JSON.parse(localStorage.getItem('skiTripExpenses')) || [];
-        const exchangeRate = 0.023; // KRW to TWD rough estimate
+        // ... (phrases, defaultChecklistData, variables remain the same)
+        const phrases = [ { k: "안녕하세요", p: "AN-NYEONG-HA-SE-YO", m: "你好" }, { k: "감사합니다", p: "GAM-SA-HAM-NI-DA", m: "謝謝" }, { k: "잠시만요", p: "JAM-SI-MAN-YO", m: "不好意思 (借過)" }, { k: "이거 주세요", p: "I-GEO JU-SE-YO", m: "請給我這個" }, { k: "얼마예요?", p: "EOL-MA-YE-YO", m: "請問多少錢？" }, { k: "화장실 어디예요?", p: "HWA-JANG-SIL EO-DI-YE-YO", m: "廁所在哪裡？" }, { k: "깎아주세요", p: "KKA-KKA-JU-SE-YO", m: "可以算便宜點嗎？" }, { k: "면세 되나요?", p: "MYEON-SE DOE-NA-YO", m: "可以退稅嗎？" }, { k: "물 주세요", p: "MUL JU-SE-YO", m: "請給我水" }, { k: "계산해 주세요", p: "GYE-SAN-HAE JU-SE-YO", m: "麻煩結帳" } ];
+        const defaultChecklistData = [ { title: "證件與錢財", items: ["護照 (檢查效期)", "機票 (電子/紙本)", "現金 (韓幣)", "信用卡 (海外回饋)", "旅遊保險單"] }, { title: "滑雪裝備", items: ["保暖長襪 (厚)", "發熱衣褲 (兩套)", "防水手套", "毛帽 (遮耳)", "圍脖/脖圍"] }, { title: "電子用品", items: ["轉接頭 (韓國圓孔)", "行動電源", "充電線", "SIM卡/漫遊"] }, { title: "藥品與雜物", items: ["感冒藥", "止痛藥", "腸胃藥", "暖暖包", "個人保養品"] }, { title: "個人物品", items: [] } ];
         let activeDate = "2025-12-21";
-        let activeTab = "itinerary";
+        let expenses = JSON.parse(localStorage.getItem('ski_exp_final_v6')) || [];
+        let checklistData = JSON.parse(localStorage.getItem('ski_checklist_data_v2')) || defaultChecklistData;
+        let checkedItems = JSON.parse(localStorage.getItem('ski_checklist_checked_v2')) || [];
+        let currentRate = parseFloat(localStorage.getItem('ski_rate')) || 43; 
 
-        // --- RENDER FUNCTIONS ---
+        function init() { renderHeader(); renderItinerary(); }
+        // ... (renderHeader, setDate, renderItinerary, renderTranslation, renderAccounting, addEx, delEx, updateRate, renderTools, toggleCheck, addChecklistItem, removeChecklistItem, convertKRW, switchTab functions remain exactly the same as previous)
+        function renderHeader(){const c=document.getElementById("header-container"),d=tripData[activeDate];let n=document.getElementById("date-nav-scroll");if(!n){const h=Object.keys(tripData).map(e=>{const t=new Date(e),a=tripData[e].weather.i;return`<div id="date-btn-${e}" onclick="setDate('${e}')" class="flex-shrink-0 flex flex-col items-center justify-center w-[60px] h-[85px] mr-3 rounded-2xl cursor-pointer transition-all border border-slate-100 bg-white text-slate-400"><span class="text-[10px] uppercase font-bold tracking-wider opacity-70 mb-1">${t.toLocaleDateString("en-US",{weekday:"short"})}</span><span class="text-xl font-black font-mono leading-none">${t.getDate()}</span><i class="fas ${a} text-xs mt-2 text-slate-300"></i></div>`}).join("");c.innerHTML=`<div class="bg-white/90 backdrop-blur-md pt-6 pb-2 border-b border-slate-100"><div class="px-5 mb-4 flex justify-between items-end"><div><div id="header-sub" class="text-xs font-bold text-blue-600 tracking-widest uppercase mb-1">${d.subtitle}</div><h1 id="header-title" class="text-3xl font-black text-slate-900">${d.title.split("/")[1].trim()}</h1></div><div class="bg-slate-50 px-3 py-2 rounded-xl border border-slate-100 text-center"><div class="text-lg text-slate-700"><i id="header-weather-icon" class="fas ${d.weather.i}"></i></div><div id="header-weather-temp" class="text-xs font-bold text-slate-500">${d.weather.t}</div></div></div><div id="header-tip-container" class="px-5 mb-4"><div class="flex items-center text-xs font-medium text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100"><i class="fas fa-tshirt mr-2 text-slate-400"></i><span id="header-tip">${d.weather.tip}</span></div></div><div id="date-nav-scroll" class="flex overflow-x-auto hide-scrollbar px-5 pb-4">${h}</div></div>`}else{document.getElementById("header-sub").innerText=d.subtitle,document.getElementById("header-title").innerText=d.title.split("/")[1].trim(),document.getElementById("header-weather-icon").className=`fas ${d.weather.i}`,document.getElementById("header-weather-temp").innerText=d.weather.t,document.getElementById("header-tip").innerText=d.weather.tip}Object.keys(tripData).forEach(e=>{const t=document.getElementById(`date-btn-${e}`),a=t.querySelector("i"),r=tripData[e].weather.i;e===activeDate?(t.className="flex-shrink-0 flex flex-col items-center justify-center w-[60px] h-[85px] mr-3 rounded-2xl cursor-pointer transition-all bg-slate-800 text-white shadow-lg scale-105 border border-slate-800",a.className=`fas ${r} text-xs mt-2 text-blue-200`):(t.className="flex-shrink-0 flex flex-col items-center justify-center w-[60px] h-[85px] mr-3 rounded-2xl cursor-pointer transition-all bg-white text-slate-400 border border-slate-100",a.className=`fas ${r} text-xs mt-2 text-slate-300`)})}
+        function setDate(e){activeDate=e,renderHeader(),renderItinerary(),window.scrollTo({top:0,behavior:"smooth"})}
+        function renderItinerary(){const e=tripData[activeDate],t=e.items,a=document.getElementById("main-content");let r="";if(e.discovery){const n=e.discovery.spots.map(e=>`<div class="flex items-start mb-3 last:mb-0"><div class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded font-bold mr-2 mt-0.5 flex-shrink-0">${e.type}</div><div><div class="font-bold text-sm text-white leading-tight">${e.name}</div><div class="text-xs text-slate-300 mt-0.5 leading-snug">${e.desc}</div></div></div>`).join("");r=`<div class="discovery-card animate-fade-in"><div class="discovery-tag"><i class="fas fa-compass mr-1"></i> 探索周邊</div><h3 class="text-xl font-bold mb-2">${e.discovery.title}</h3><p class="text-sm text-slate-300 mb-4 leading-relaxed">${e.discovery.desc}</p><div class="bg-black/20 rounded-xl p-4 backdrop-blur-sm border border-white/10">${n}</div></div>`}const n=t.map((e,t)=>{if("flight"===e.type)return`<div class="boarding-pass"><div class="pass-top"><div class="flex justify-between items-center mb-6"><span class="bg-slate-900 text-white text-[10px] font-bold px-2 py-1 rounded tracking-widest">BOARDING PASS</span><div class="flex items-center gap-2"><i class="fas fa-plane text-slate-300"></i><span class="font-mono font-bold text-slate-700">${e.airline}</span></div></div><div class="flex justify-between items-end mb-2"><div><div class="text-4xl font-black text-slate-800 font-mono">${e.from}</div><div class="text-xs text-slate-500 font-bold mt-1 bg-slate-100 inline-block px-2 py-0.5 rounded">${e.fromCity}</div></div><div class="flex-1 flex flex-col items-center px-4 pb-2"><div class="text-xs font-mono font-bold text-blue-500 mb-1">${e.code}</div><div class="w-full h-[2px] bg-slate-200 relative"><div class="absolute right-0 -top-[3px] w-2 h-2 bg-slate-300 rounded-full"></div><i class="fas fa-plane absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-300 text-xs transform rotate-90"></i></div></div><div class="text-right"><div class="text-4xl font-black text-slate-800 font-mono">${e.to}</div><div class="text-xs text-slate-500 font-bold mt-1 bg-slate-100 inline-block px-2 py-0.5 rounded">${e.toCity}</div></div></div><div class="grid grid-cols-2 gap-8 mt-6"><div><div class="text-[10px] text-slate-400 uppercase font-bold mb-1">Departure</div><div class="text-2xl font-bold text-slate-800 font-mono">${e.fromTime} <span class="text-sm text-slate-500 font-normal">(${e.fromTerm})</span></div></div><div class="text-right"><div class="text-[10px] text-slate-400 uppercase font-bold mb-1">Arrival</div><div class="text-2xl font-bold text-blue-600 font-mono">${e.toTime} <span class="text-sm text-blue-400 font-normal">(${e.toTerm})</span></div></div></div></div><div class="pass-bottom"><div><div class="text-[10px] text-slate-400 uppercase font-bold">Baggage</div><div class="text-sm font-bold text-slate-700">${e.bag}</div></div><div><div class="text-[10px] text-slate-400 uppercase font-bold text-right">Gate</div><div class="text-sm font-bold text-slate-700 text-right">${e.gate}</div></div></div></div>`;if("snack"===e.type){const t=e.items.map(e=>`<div class="flex items-start mb-3 last:mb-0 border-b border-indigo-500/30 pb-3 last:border-0 last:pb-0"><i class="fas fa-utensils text-yellow-400 mt-1 mr-3 text-xs"></i><div><div class="font-bold text-white text-sm">${e.name}</div><div class="text-xs text-indigo-200 mt-0.5">${e.desc}</div></div></div>`).join("");return`<div class="snack-card"><div class="text-[10px] font-bold text-indigo-300 uppercase tracking-widest mb-3 flex items-center"><i class="fas fa-moon mr-1"></i> Nightlife & Snacks</div>${t}</div>`}if("transit"===e.type){const t=e.steps.map(e=>`<div class="transit-line justify-between group"><div class="flex items-center flex-1"><span class="line-badge ${e.line}">${e.name}</span><div class="flex-1"><div class="font-bold text-slate-700 text-xs flex items-center">${e.dir} ${e.exit?`<span class="exit-badge"><i class="fas fa-door-open mr-1"></i>${e.exit}</span>`:""}</div><div class="text-[10px] text-slate-400 mt-0.5">${e.desc}</div></div></div><div class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded ml-2 whitespace-nowrap border border-slate-200"><i class="fas fa-stopwatch mr-1 text-slate-400"></i>${e.time}</div></div>`).join("");return`<div class="transit-card"><div class="flex justify-between items-center mb-3 border-b border-slate-200 pb-2"><div class="text-xs font-bold text-slate-400 uppercase tracking-wider">交通指南</div><div class="text-xs font-bold text-blue-600">${e.from} <i class="fas fa-arrow-right mx-1 text-slate-300"></i> ${e.to}</div></div><div>${t}</div></div>`}const n=`c-${t}`,i="transport"===e.type?"fa-train-subway":"hotel"===e.type?"fa-bed":"food"===e.type?"fa-utensils":"shopping"===e.type?"fa-bag-shopping":"fa-person-skiing",s="transport"===e.type?"text-blue-500":"hotel"===e.type?"text-purple-500":"food"===e.type?"text-orange-500":"shopping"===e.type?"text-pink-500":"text-cyan-500",l=e.tags?e.tags.map(e=>{let t="tag-slate";return(e.includes("必")||e.includes("租")||e.includes("金"))&&(t="tag-orange"),(e.includes("集")||e.includes("遲")||e.includes("注"))&&(t="tag-red"),(e.includes("教")||e.includes("路")||e.includes("車"))&&(t="tag-blue"),`<span class="tag ${t}">${e}</span>`}).join(""):"";let o="";if(e.address||e.naverLink){const t=e.naverLink||`https://map.naver.com/v5/search/${encodeURIComponent(e.mapQuery||e.address)}`;o=`<a href="${t}" target="_blank" class="block mt-4 w-full bg-[#03C75A] text-white text-center py-3 rounded-xl font-bold text-sm shadow-sm active:scale-95 transition-transform flex items-center justify-center"><span class="mr-2 font-black text-lg">N</span> 開啟 Naver Map</a>`}let c=e.exit?`<span class="exit-badge mb-1"><i class="fas fa-door-open mr-1"></i>${e.exit}</span>`:"";return`<div id="${n}" class="app-card p-5 cursor-pointer active:scale-[0.99]" onclick="this.classList.toggle('active-card')"><div class="flex justify-between items-start"><div class="flex gap-4"><div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-lg ${s} border border-slate-100 flex-shrink-0"><i class="fas ${i}"></i></div><div><div class="text-xs font-mono font-bold text-slate-400 mb-1">${e.time||""}</div><h3 class="text-lg font-bold text-slate-800 leading-tight mb-1 flex items-center">${e.title}</h3><div class="text-sm font-medium text-slate-500">${e.sub} ${c}</div><div class="mt-2">${l}</div></div></div><div class="chevron mt-2 text-slate-300"><i class="fas fa-chevron-down"></i></div></div><div class="accordion-content"><div class="text-sm text-slate-600 leading-relaxed p-4 bg-slate-50 rounded-xl border border-slate-100">${e.desc}</div>${e.tips?`<div class="mt-3 flex gap-3 p-3 bg-amber-50 rounded-xl border border-amber-100 text-xs text-amber-800"><i class="fas fa-lightbulb text-amber-500 mt-0.5 flex-shrink-0"></i><div><span class="font-bold">Tips:</span> ${e.tips}</div></div>`:""}${o}</div></div>`}).join("");a.innerHTML=`<div class="pb-20 animate-fade-in">${r}${n}</div>`}
+        function renderTranslation() { document.getElementById('main-content').innerHTML = `<div class="pt-2 pb-24"><h2 class="text-2xl font-black text-slate-900 mb-6 px-2">基本用語 (Basic Korean)</h2><div class="trans-grid">${phrases.map(p => `<div class="trans-card" onclick="alert('${p.p}')"><div class="trans-ko">${p.k}</div><div class="trans-pron">${p.p}</div><div class="trans-zh">${p.m}</div></div>`).join('')}</div></div>`; }
+        function renderAccounting() { let t=0,m=0,c=0; expenses.forEach(e => { let a = e.c === 'TWD' ? parseInt(e.a) * currentRate : parseInt(e.a); t += a; if(e.w === 'me') m += a; else c += a; }); const d = m - (t / 2); const l = expenses.slice().reverse().map((e,i) => { const s = e.c === 'TWD' ? 'NT$' : '₩'; const st = e.w === 'me' ? 'border-l-4 border-blue-500' : 'border-l-4 border-green-500'; return `<div class="flex justify-between items-center p-4 bg-white rounded-xl mb-3 shadow-sm ${st}"><div><div class="font-bold text-slate-700">${e.i}</div><div class="text-xs text-slate-400 mt-1">${e.w==='me'?'我':'杯'}先付</div></div><div class="text-right"><div class="font-bold text-slate-800">${s} ${parseInt(e.a).toLocaleString()}</div><button onclick="delEx(${expenses.length-1-i})" class="text-xs text-red-300 mt-1 px-2 py-1"><i class="fas fa-trash"></i></button></div></div>`; }).join(''); document.getElementById('main-content').innerHTML = `<div class="pt-4 pb-24"><div class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl mb-6"><div class="flex justify-between items-start mb-2"><div class="text-xs text-slate-400 uppercase font-bold">Total Spent (Est.)</div><div class="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400">Rate: 1 TWD ≈ ${currentRate} KRW</div></div><div class="text-4xl font-black mb-4 font-mono">₩${t.toLocaleString()}</div><div class="flex gap-4 pt-4 border-t border-white/10 text-sm"><div class="flex-1">我付 ≈ ₩${m.toLocaleString()}</div><div class="flex-1 text-right">杯付 ≈ ₩${c.toLocaleString()}</div></div></div><div class="text-center mb-6 font-bold ${d>0?'text-green-600':'text-blue-600'}">${d>0 ? `杯茛 需給你 ≈ ₩${Math.abs(d).toLocaleString()}` : d<0 ? `你需給 杯茛 ≈ ₩${Math.abs(d).toLocaleString()}` : '目前結清'}</div><div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6"><div class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">新增消費</div><div class="mb-3"><input id="ei" placeholder="項目名稱 (例如: 晚餐)" class="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-blue-500 transition-colors"></div><div class="flex gap-2 mb-4"><div class="relative w-1/3"><select id="ec" class="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-blue-500 appearance-none font-bold text-slate-700"><option value="KRW">₩ KRW</option><option value="TWD">NT$ TWD</option></select><div class="absolute right-3 top-3.5 text-slate-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div></div><input id="ea" type="number" placeholder="金額" class="w-2/3 p-3 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-blue-500 transition-colors"></div><div class="flex gap-3"><button onclick="addEx('me')" class="flex-1 bg-blue-100 hover:bg-blue-200 py-3 rounded-xl font-bold text-blue-700 transition-colors active:scale-95">我先付</button><button onclick="addEx('cup')" class="flex-1 bg-green-100 hover:bg-green-200 py-3 rounded-xl font-bold text-green-700 transition-colors active:scale-95">杯茛先付</button></div></div><div>${l}</div></div>`; }
+        function addEx(w){ const i=document.getElementById('ei').value,a=document.getElementById('ea').value,c=document.getElementById('ec').value; if(!i||!a)return; expenses.push({i,a,w,c,id:Date.now()}); localStorage.setItem('ski_exp_final_v6',JSON.stringify(expenses)); renderAccounting(); }
+        function delEx(i){ if(confirm('確定刪除?')){expenses.splice(i,1); localStorage.setItem('ski_exp_final_v6',JSON.stringify(expenses)); renderAccounting();} }
+        function updateRate(v) { const n = parseFloat(v); if(n > 0) { currentRate = n; localStorage.setItem('ski_rate', currentRate); const k = document.getElementById('krw-in'); if(k && k.value) convertKRW(k.value); } }
+        function renderTools() { if (!checklistData.find(c => c.title === "個人物品")) { checklistData.push({ title: "個人物品", items: [] }); } const c = checklistData.map((g, ci) => `<div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-4"><h3 class="font-bold text-slate-800 mb-3 flex items-center"><i class="fas fa-check-circle text-blue-500 mr-2"></i> ${g.title}</h3><div>${g.items.map((it, ii) => { const ic = checkedItems.includes(it) ? 'checked' : ''; return `<div class="check-item justify-between group ${ic}" onclick="toggleCheck(this, '${it}')"><div class="flex items-center"><div class="checkbox-custom"><i class="fas fa-check text-xs"></i></div><span class="text-sm text-slate-700 font-medium item-text">${it}</span></div><button onclick="event.stopPropagation(); removeChecklistItem(${ci}, ${ii})" class="text-slate-300 hover:text-red-400 p-2 transition"><i class="fas fa-trash-alt"></i></button></div>`; }).join('')}</div></div>`).join(''); document.getElementById('main-content').innerHTML = `<div class="pt-4 pb-24"><h2 class="text-2xl font-black text-slate-900 mb-6 px-2">Utility Hub</h2><div class="bg-slate-900 text-white p-5 rounded-2xl shadow-lg mb-6"><div class="flex justify-between items-center mb-3"><div class="text-xs text-slate-400 font-bold uppercase"><i class="fas fa-calculator mr-1"></i> 匯率換算</div><div class="flex items-center text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded"><span class="mr-1">1 台幣 = </span><input type="number" value="${currentRate}" class="w-10 bg-transparent text-center border-b border-slate-500 text-white focus:outline-none" onchange="updateRate(this.value)"><span class="ml-1">韓幣</span></div></div><div class="flex items-center gap-3"><input id="krw-in" type="number" placeholder="₩ 韓幣" class="w-1/2 bg-slate-800 border border-slate-700 rounded-xl p-3 text-white outline-none focus:border-blue-500" oninput="convertKRW(this.value)"><i class="fas fa-arrow-right text-slate-500"></i><div class="w-1/2 text-xl font-bold font-mono text-right" id="twd-out">NT$ 0</div></div></div><div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 mb-6"><div class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">新增清單項目</div><div class="flex gap-2"><input id="new-checklist-item" placeholder="輸入物品名稱..." class="flex-1 p-3 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-blue-500 transition-colors"><button onclick="addChecklistItem()" class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-3 px-6 rounded-xl transition-colors">加入</button></div></div>${c}<div class="grid grid-cols-2 gap-3 mt-6"><a href="tel:1330" class="bg-red-50 p-4 rounded-xl text-center border border-red-100 active:bg-red-100"><div class="text-xl mb-1">📞</div><div class="font-bold text-red-600 text-sm">翻譯熱線 1330</div></a><a href="tel:112" class="bg-red-50 p-4 rounded-xl text-center border border-red-100 active:bg-red-100"><div class="text-xl mb-1">🚓</div><div class="font-bold text-red-600 text-sm">警察 112</div></a></div></div>`; }
+        function toggleCheck(e, i) { if(checkedItems.includes(i)) { checkedItems = checkedItems.filter(x => x !== i); e.classList.remove('checked'); } else { checkedItems.push(i); e.classList.add('checked'); } localStorage.setItem('ski_checklist_checked_v2', JSON.stringify(checkedItems)); }
+        function addChecklistItem() { const i = document.getElementById('new-checklist-item'); const v = i.value.trim(); if (!v) return; let p = checklistData.find(c => c.title === "個人物品"); if (!p) { p = { title: "個人物品", items: [] }; checklistData.push(p); } p.items.push(v); localStorage.setItem('ski_checklist_data_v2', JSON.stringify(checklistData)); i.value = ''; renderTools(); }
+        function removeChecklistItem(c, i) { if(confirm('確定要移除此項目嗎？')) { const t = checklistData[c].items[i]; checklistData[c].items.splice(i, 1); checkedItems = checkedItems.filter(x => x !== t); localStorage.setItem('ski_checklist_data_v2', JSON.stringify(checklistData)); localStorage.setItem('ski_checklist_checked_v2', JSON.stringify(checkedItems)); renderTools(); } }
+        function convertKRW(v) { const t = Math.round(v / currentRate); document.getElementById('twd-out').innerText = `NT$ ${t.toLocaleString()}`; }
+        function switchTab(t){ document.querySelectorAll('.nav-pill').forEach(e=>e.classList.remove('active')); document.getElementById(`nav-${t}`).classList.add('active'); document.getElementById('header-container').style.display = t==='itinerary'?'block':'none'; if(t==='itinerary'){renderHeader();renderItinerary();} else if(t==='accounting')renderAccounting(); else if(t==='translate')renderTranslation(); else renderTools(); }
 
-        function renderDateNav() {
-            const nav = document.getElementById('date-nav');
-            nav.innerHTML = '';
-            Object.keys(tripData).forEach(date => {
-                const day = new Date(date).getDate();
-                const isActive = date === activeDate;
-                const btn = document.createElement('button');
-                btn.className = `flex-shrink-0 w-14 h-16 rounded-xl flex flex-col items-center justify-center transition-all ${isActive ? 'bg-blue-600 text-white shadow-lg transform scale-105' : 'bg-white text-gray-400'}`;
-                btn.onclick = () => { activeDate = date; renderItinerary(); renderDateNav(); };
-                btn.innerHTML = `<span class="text-xs font-bold">12/</span><span class="text-xl font-bold">${day}</span>`;
-                nav.appendChild(btn);
-            });
-        }
-
-        function renderItinerary() {
-            const container = document.getElementById('app-content');
-            container.innerHTML = '';
-            const dayData = tripData[activeDate];
-            
-            // Weather Placeholder (Simulated logic based on date)
-            const weatherDiv = document.createElement('div');
-            weatherDiv.className = "bg-gradient-to-r from-blue-400 to-blue-500 rounded-xl p-4 text-white shadow-md mb-4 flex justify-between items-center";
-            weatherDiv.innerHTML = `<div><div class="text-sm opacity-90">本日天氣預報</div><div class="text-2xl font-bold">-2°C ~ 4°C</div></div><i class="fas fa-snowflake text-4xl opacity-80"></i>`;
-            container.appendChild(weatherDiv);
-
-            if(!dayData) {
-                container.innerHTML += `<div class="text-center text-gray-400 mt-10">尚無行程安排</div>`;
-                return;
-            }
-
-            dayData.forEach(item => {
-                let icon = 'fa-circle';
-                let colorClass = 'border-l-4 border-gray-300';
-                if(item.type === 'transport') { icon = 'fa-train'; colorClass = 'border-l-4 border-blue-500'; }
-                if(item.type === 'food') { icon = 'fa-utensils'; colorClass = 'border-l-4 border-orange-400'; }
-                if(item.type === 'activity') { icon = 'fa-person-skiing'; colorClass = 'border-l-4 border-cyan-500'; }
-                if(item.type === 'hotel') { icon = 'fa-bed'; colorClass = 'border-l-4 border-purple-500'; }
-
-                let tagsHtml = item.tags ? item.tags.map(tag => {
-                    let style = "bg-gray-100 text-gray-600";
-                    if(tag.includes("必吃") || tag.includes("必點")) style = "tag-must-eat";
-                    if(tag.includes("必買")) style = "tag-must-buy";
-                    if(tag.includes("注意") || tag.includes("攻略")) style = "bg-red-50 text-red-600";
-                    return `<span class="text-xs px-2 py-1 rounded-full ${style} mr-1 mb-1 inline-block">${tag}</span>`;
-                }).join('') : '';
-
-                let subwayHtml = item.subway ? `<div class="mt-2 p-2 bg-gray-50 rounded text-xs text-gray-600 flex items-center"><i class="fas fa-subway mr-2 text-blue-800"></i> ${item.subway}</div>` : '';
-
-                const card = document.createElement('div');
-                card.className = `bg-white rounded-xl p-4 card-shadow mb-3 ${colorClass}`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-1">
-                        <span class="text-lg font-bold text-gray-800">${item.time}</span>
-                        <i class="fas ${icon} text-gray-300"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 leading-tight">${item.title}</h3>
-                    <div class="text-sm text-blue-600 font-medium mb-1">${item.subtitle}</div>
-                    <p class="text-sm text-gray-500 mb-2 leading-relaxed">${item.desc}</p>
-                    ${subwayHtml}
-                    <div class="mt-2 flex flex-wrap">${tagsHtml}</div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function renderAccounting() {
-            const container = document.getElementById('app-content');
-            
-            // Calculate Splits
-            let total = 0;
-            let paidByUser = 0;
-            let paidByPartner = 0; // Cup/Beigen
-
-            expenses.forEach(ex => {
-                total += parseFloat(ex.amount);
-                if(ex.payer === 'me') paidByUser += parseFloat(ex.amount);
-                else paidByPartner += parseFloat(ex.amount);
-            });
-
-            // If split equally
-            const shouldPay = total / 2;
-            const diff = paidByUser - shouldPay; // If positive, Partner owes User. If negative, User owes Partner.
-            let resultText = diff > 0 ? `杯茛 需給你` : `你需給 杯茛`;
-            let resultAmount = Math.abs(diff).toLocaleString();
-
-            let listHtml = expenses.slice().reverse().map((ex, index) => `
-                <div class="bg-white p-3 rounded-lg shadow-sm flex justify-between items-center mb-2 border-l-4 ${ex.payer === 'me' ? 'border-blue-400' : 'border-green-400'}">
-                    <div>
-                        <div class="font-bold text-gray-800">${ex.item}</div>
-                        <div class="text-xs text-gray-400">${ex.date} | ${ex.payer === 'me' ? '我' : '杯茛'} 先付</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="font-bold">₩${parseInt(ex.amount).toLocaleString()}</div>
-                        <div class="text-xs text-gray-400">≈ NT$${Math.round(ex.amount * exchangeRate).toLocaleString()}</div>
-                    </div>
-                    <button onclick="deleteExpense(${index})" class="ml-3 text-red-300"><i class="fas fa-trash"></i></button>
-                </div>
-            `).join('');
-
-            container.innerHTML = `
-                <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-2xl p-5 text-white shadow-lg mb-6">
-                    <div class="text-sm opacity-75 mb-1">總支出 (KRW)</div>
-                    <div class="text-3xl font-bold mb-4">₩${total.toLocaleString()}</div>
-                    <div class="flex justify-between text-sm bg-white/10 p-3 rounded-lg">
-                        <div>
-                            <div class="opacity-75">分帳結果</div>
-                            <div class="font-bold text-lg text-yellow-300">${resultText} <span class="text-xl">₩${resultAmount}</span></div>
-                        </div>
-                        <div class="text-right opacity-75 text-xs">
-                            我付: ₩${paidByUser.toLocaleString()}<br>
-                            杯茛付: ₩${paidByPartner.toLocaleString()}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-4 rounded-xl shadow-sm mb-6">
-                    <h3 class="font-bold text-gray-700 mb-3">新增記帳</h3>
-                    <div class="grid grid-cols-1 gap-3">
-                        <input type="text" id="ex-item" placeholder="項目 (例如: 晚餐)" class="bg-gray-50 border border-gray-200 rounded p-2 w-full">
-                        <div class="flex gap-2">
-                            <input type="number" id="ex-amount" placeholder="韓幣金額" class="bg-gray-50 border border-gray-200 rounded p-2 w-full">
-                            <select id="ex-payer" class="bg-gray-50 border border-gray-200 rounded p-2">
-                                <option value="me">我先付</option>
-                                <option value="partner">杯茛先付</option>
-                            </select>
-                        </div>
-                        <div id="ex-twd-hint" class="text-xs text-right text-gray-400 h-4"></div>
-                        <button onclick="addExpense()" class="bg-blue-600 text-white rounded p-3 font-bold active:bg-blue-700 transition">新增紀錄</button>
-                    </div>
-                </div>
-
-                <div class="mb-20">
-                    <h3 class="font-bold text-gray-700 mb-3 ml-1">最近紀錄</h3>
-                    ${listHtml}
-                </div>
-            `;
-
-            // Add listener for instant currency conversion hint
-            document.getElementById('ex-amount').addEventListener('input', (e) => {
-                const val = e.target.value;
-                if(val) {
-                    document.getElementById('ex-twd-hint').innerText = `≈ NT$${Math.round(val * exchangeRate).toLocaleString()}`;
-                } else {
-                    document.getElementById('ex-twd-hint').innerText = '';
-                }
-            });
-        }
-
-        function addExpense() {
-            const item = document.getElementById('ex-item').value;
-            const amount = document.getElementById('ex-amount').value;
-            const payer = document.getElementById('ex-payer').value;
-
-            if(!item || !amount) return alert("請輸入項目和金額");
-
-            expenses.push({
-                id: Date.now(),
-                date: new Date().toLocaleDateString(),
-                item,
-                amount,
-                payer
-            });
-            localStorage.setItem('skiTripExpenses', JSON.stringify(expenses));
-            renderAccounting();
-        }
-
-        function deleteExpense(index) {
-            // Because we reversed the display list, we need to find the correct index in the original array
-            // Actually, simpler to just reverse the copy for display, but here let's just use the ID if we were doing it properly.
-            // For this simple version, let's just reload from local storage minus the one we clicked.
-            // NOTE: The index passed here is from the reversed array.
-            const realIndex = expenses.length - 1 - index;
-            expenses.splice(realIndex, 1);
-            localStorage.setItem('skiTripExpenses', JSON.stringify(expenses));
-            renderAccounting();
-        }
-
-        function renderTools() {
-            const container = document.getElementById('app-content');
-            
-            const flightHtml = toolsData.flight.map(f => `
-                <div class="bg-white rounded-lg p-3 mb-2 border-l-4 border-indigo-500 shadow-sm">
-                    <div class="flex justify-between font-bold text-gray-800">
-                        <span>${f.dir}</span>
-                        <span>${f.code}</span>
-                    </div>
-                    <div class="text-sm text-gray-600 mt-1">${f.date} | ${f.time}</div>
-                    <div class="text-xs text-gray-400 mt-1">${f.airport} | 行李: ${f.bag}</div>
-                </div>
-            `).join('');
-
-            const stayHtml = toolsData.stay.map(s => `
-                <div class="bg-white rounded-lg p-3 mb-2 border-l-4 border-purple-500 shadow-sm">
-                    <div class="font-bold text-gray-800">${s.name}</div>
-                    <div class="text-sm text-gray-600 mt-1">${s.date}</div>
-                    <div class="mt-2 inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded select-all font-mono">${s.code}</div>
-                </div>
-            `).join('');
-
-             const emergencyHtml = toolsData.emergency.map(e => `
-                <a href="tel:${e.number}" class="flex justify-between items-center bg-red-50 p-3 rounded-lg mb-2 border border-red-100">
-                    <span class="text-red-800 font-medium">${e.name}</span>
-                    <span class="text-red-600 font-bold"><i class="fas fa-phone-alt mr-1"></i> ${e.number}</span>
-                </a>
-            `).join('');
-
-            container.innerHTML = `
-                <h3 class="font-bold text-gray-700 mb-2 ml-1">航班資訊</h3>
-                ${flightHtml}
-                
-                <h3 class="font-bold text-gray-700 mb-2 ml-1 mt-6">住宿資訊</h3>
-                ${stayHtml}
-
-                <h3 class="font-bold text-gray-700 mb-2 ml-1 mt-6">緊急聯絡</h3>
-                ${emergencyHtml}
-            `;
-        }
-
-        function switchTab(tab) {
-            activeTab = tab;
-            // Update UI
-            ['itinerary', 'accounting', 'tools'].forEach(t => {
-                const btn = document.getElementById(`btn-${t}`);
-                if(t === tab) {
-                    btn.classList.add('text-blue-600', 'active-tab');
-                    btn.classList.remove('text-gray-500');
-                } else {
-                    btn.classList.remove('text-blue-600', 'active-tab');
-                    btn.classList.add('text-gray-500');
-                }
-            });
-
-            // Update Header Visibility
-            if(tab === 'itinerary') {
-                document.getElementById('date-nav').style.display = 'flex';
-                document.getElementById('weather-header').style.visibility = 'visible';
-                renderItinerary();
-            } else {
-                document.getElementById('date-nav').style.display = 'none';
-                document.getElementById('weather-header').style.visibility = 'hidden';
-                if(tab === 'accounting') renderAccounting();
-                if(tab === 'tools') renderTools();
-            }
-        }
-
-        // Init
-        renderDateNav();
-        renderItinerary();
-
+        init();
     </script>
 </body>
 </html>
