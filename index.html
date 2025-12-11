@@ -312,17 +312,95 @@
                 ]
             },
             "2025-12-25": { 
-                title: "DAY 5 / 聖誕快樂", subtitle: "Free Time", weather: { t: "0°C", i: "fa-gift", tip: "適合穿大衣，圍巾必備" }, 
+                title: "DAY 5 / 聖誕快樂", subtitle: "Free Time", weather: { t: "0°C", i: "fa-gift", tip: "適合穿大衣，圍巾必備" },
+                discovery: {
+                    title: "聖水洞：首爾的布魯克林",
+                    desc: "廢棄工廠改建的咖啡廳與潮牌店聚集地，是首爾現在最潮的區域。",
+                    spots: [
+                        { name: "NUDAKE", type: "甜點", desc: "Gentle Monster 旗下的藝術甜點店，必點『抹茶岩漿牛角』。" },
+                        { name: "Dior 聖水", type: "打卡", desc: "超美的玻璃溫室建築，晚上點燈更美。" }
+                    ]
+                },
                 items: [
-                    { type: "activity", time: "10:00", title: "首爾自由行", sub: "推薦行程", desc: "推薦：汝矣島現代百貨 (The Hyundai Seoul) 看聖誕裝飾，或弘大逛街。" },
-                    { type: "transit", from: "合井站 (Airbnb)", to: "汝矣島 (The Hyundai)", steps: [ { line: "line-2", name: "2號線", dir: "往 堂山 (Dangsan)", desc: "合井 ➜ 堂山站 (1站)", time: "3分鐘" }, { line: "line-9", name: "轉乘 9號線", dir: "往 汝矣島/綜合運動場", desc: "堂山 ➜ 汝矣島站 (2站)", time: "4分鐘", exit: "3號出口" }, { line: "line-walk", name: "步行", dir: "地下連通", desc: "有地下道直通百貨", time: "10分鐘" } ] }
+                    { 
+                        type: "transit", from: "合井站 (Airbnb)", to: "新村 (午餐)", 
+                        steps: [{ line: "line-2", name: "2號線", dir: "往 弘大/新村", desc: "合井 ➜ 新村站 (2站)", time: "5分鐘", exit: "1號出口" }]
+                    },
+                    { 
+                        type: "food", time: "12:00", title: "午餐：春川家辣炒雞排", sub: "新村站", exit: "1號出口",
+                        desc: "必點『起司辣炒雞排』+ 綜合配料 (麵條/年糕/地瓜)。最後一定要炒飯！", 
+                        naverLink: "https://map.naver.com/v5/search/춘천집닭갈비막국수",
+                        tags: ["必吃", "排隊美食"] 
+                    },
+                    { 
+                        type: "transit", from: "新村 (午餐)", to: "聖水洞", 
+                        steps: [
+                            { line: "line-2", name: "2號線", dir: "往 乙支路/聖水", desc: "新村 ➜ 聖水站 (13站)", time: "25分鐘", exit: "3號出口" }
+                        ]
+                    },
+                    { type: "activity", time: "14:00", title: "聖水洞 Cafe & Shopping", sub: "聖水站", desc: "逛 Tamburins, Dior(拍照), Point of View 文具店。下午茶推薦：Onion 或 NUDAKE。", tags:["逛街", "網美景點"] },
+                    { 
+                        type: "transit", from: "聖水站", to: "馬場洞 (晚餐)", 
+                        steps: [
+                            { line: "line-2", name: "2號線", dir: "往 往十里", desc: "聖水 ➜ 往十里 (2站)" },
+                            { line: "line-5", name: "轉乘 5號線", dir: "往 馬場/千戶", desc: "往十里 ➜ 馬場站 (1站)", time: "15分鐘", exit: "2號出口" }
+                        ]
+                    },
+                    { 
+                        type: "food", time: "19:00", title: "晚餐：馬場洞韓牛村", sub: "馬場站", exit: "2號出口",
+                        desc: "直接在肉舖選肉 (推薦: 雪花里脊 Salchisal)，再去樓上餐廳烤。CP值最高的韓牛體驗。", 
+                        naverLink: "https://map.naver.com/v5/search/마장축산물시장",
+                        tags: ["韓牛", "聖誕大餐"] 
+                    },
+                    { 
+                        type: "transit", from: "馬場洞", to: "東大門", 
+                        steps: [
+                            { line: "line-5", name: "5號線", dir: "往 東大門歷史公園", desc: "馬場 ➜ 東大門歷史公園 (3站)", time: "6分鐘", exit: "14號出口" }
+                        ]
+                    },
+                    { type: "activity", time: "21:00", title: "東大門夜逛", sub: "東大門歷史公園站", desc: "NyuNyu 飾品批發 (開到凌晨)、DDP 設計廣場夜景。週四晚上批發市場有開。", tags:["夜貓行程"] }
                 ] 
             },
             "2025-12-26": { 
                 title: "DAY 6 / 文化巡禮", subtitle: "Seoul City", weather: { t: "2°C", i: "fa-sun", tip: "天氣轉晴，適合戶外拍照" }, 
                 items: [
-                    { type: "activity", time: "10:00", title: "首爾自由行", sub: "推薦行程", desc: "推薦：北村韓屋村、三清洞、景福宮。" },
-                    { type: "transit", from: "合井站 (Airbnb)", to: "安國站 (北村)", steps: [ { line: "line-6", name: "6號線", dir: "往 藥水 (Yaksu)", desc: "合井 ➜ 藥水站 (11站)", time: "22分鐘" }, { line: "line-3", name: "轉乘 3號線", dir: "往 安國/景福宮", desc: "藥水 ➜ 安國站 (3站)", time: "6分鐘", exit: "2號出口" } ] }
+                    { 
+                        type: "transit", from: "合井站 (Airbnb)", to: "西村 (早晨散步)", 
+                        steps: [{ line: "line-2", name: "2號線", dir: "往 乙支路", desc: "合井 ➜ 乙支路3街 (6站)" }, { line: "line-3", name: "轉乘 3號線", dir: "往 景福宮", desc: "乙支路3街 ➜ 景福宮站 (2站)", time: "25分鐘", exit: "2號出口" }] 
+                    },
+                    { 
+                        type: "activity", time: "09:30", title: "西村 & 通仁市場", sub: "景福宮站", exit: "2號出口",
+                        desc: "逛逛西村的特色小店、書店。可以去通仁市場用古銅錢買便當。", 
+                        naverLink: "https://map.naver.com/v5/search/서촌마을",
+                        tags: ["文青", "市場美食"]
+                    },
+                    { 
+                        type: "transit", from: "西村", to: "北村 (Artist Bakery)", 
+                        steps: [{ line: "line-walk", name: "步行/公車", dir: "往 安國站", desc: "步行約 15-20 分鐘，或搭乘公車", time: "20分鐘" }] 
+                    },
+                    { 
+                        type: "food", time: "12:00", title: "午茶：Artist Bakery", sub: "安國站", exit: "1號出口",
+                        desc: "倫敦貝果姐妹店，主打多種口味『鹽麵包』。推薦：松露鹽麵包、洋蔥大蔥鹽麵包。", 
+                        naverLink: "https://map.naver.com/v5/search/아티스트베이커리",
+                        tips: "人氣超高，建議先抽號碼牌。",
+                        tags: ["排隊名店", "鹽麵包"]
+                    },
+                    { type: "activity", time: "13:30", title: "北村韓屋村 & 景福宮", sub: "安國站", desc: "穿著韓服在古宮拍照。下午可以在三清洞喝咖啡或逛逛工藝品店。", tags:["文化體驗"] },
+                    { 
+                        type: "transit", from: "北村", to: "益善洞", 
+                        steps: [{ line: "line-walk", name: "步行", dir: "往 鐘路3街", desc: "從安國站步行約 10 分鐘即可抵達", time: "10分鐘" }] 
+                    },
+                    { type: "activity", time: "16:00", title: "益善洞韓屋村", sub: "鐘路3街站", desc: "狹窄巷弄裡的復古咖啡廳與文創小店。傍晚點燈後氣氛極佳。", naverLink: "https://map.naver.com/v5/search/익선동%20한옥거리", tags:["復古風", "拍照"] },
+                    { 
+                        type: "transit", from: "益善洞", to: "弘大 (晚餐)", 
+                        steps: [{ line: "line-walk", name: "步行", dir: "往 乙支路3街", desc: "步行至乙支路3街站" }, { line: "line-2", name: "2號線", dir: "往 弘大", desc: "乙支路3街 ➜ 弘大入口 (6站)", time: "15分鐘", exit: "9號出口" }] 
+                    },
+                    { 
+                        type: "food", time: "19:00", title: "晚餐：百年土種蔘雞湯", sub: "弘大入口站", exit: "9號出口",
+                        desc: "米其林推薦！湯頭濃郁，雞肉燉到骨肉分離。冬天喝一碗全身暖呼呼。", 
+                        naverLink: "https://map.naver.com/v5/search/백년토종삼계탕%20본점",
+                        tags: ["米其林", "必吃"]
+                    }
                 ] 
             },
             "2025-12-27": {
@@ -338,7 +416,7 @@
             }
         };
 
-        // ... (phrases, defaultChecklistData, variables remain the same)
+        // ... (rest of the script remains the same)
         const phrases = [ { k: "안녕하세요", p: "AN-NYEONG-HA-SE-YO", m: "你好" }, { k: "감사합니다", p: "GAM-SA-HAM-NI-DA", m: "謝謝" }, { k: "잠시만요", p: "JAM-SI-MAN-YO", m: "不好意思 (借過)" }, { k: "이거 주세요", p: "I-GEO JU-SE-YO", m: "請給我這個" }, { k: "얼마예요?", p: "EOL-MA-YE-YO", m: "請問多少錢？" }, { k: "화장실 어디예요?", p: "HWA-JANG-SIL EO-DI-YE-YO", m: "廁所在哪裡？" }, { k: "깎아주세요", p: "KKA-KKA-JU-SE-YO", m: "可以算便宜點嗎？" }, { k: "면세 되나요?", p: "MYEON-SE DOE-NA-YO", m: "可以退稅嗎？" }, { k: "물 주세요", p: "MUL JU-SE-YO", m: "請給我水" }, { k: "계산해 주세요", p: "GYE-SAN-HAE JU-SE-YO", m: "麻煩結帳" } ];
         const defaultChecklistData = [ { title: "證件與錢財", items: ["護照 (檢查效期)", "機票 (電子/紙本)", "現金 (韓幣)", "信用卡 (海外回饋)", "旅遊保險單"] }, { title: "滑雪裝備", items: ["保暖長襪 (厚)", "發熱衣褲 (兩套)", "防水手套", "毛帽 (遮耳)", "圍脖/脖圍"] }, { title: "電子用品", items: ["轉接頭 (韓國圓孔)", "行動電源", "充電線", "SIM卡/漫遊"] }, { title: "藥品與雜物", items: ["感冒藥", "止痛藥", "腸胃藥", "暖暖包", "個人保養品"] }, { title: "個人物品", items: [] } ];
         let activeDate = "2025-12-21";
