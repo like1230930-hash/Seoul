@@ -6,19 +6,14 @@
     <meta name="theme-color" content="#ffffff" />
     <title>Seoul 2025 Ski Trip</title>
     
-    <!-- PWA Requirements -->
-    <link rel="manifest" href="manifest.json" />
-    
     <!-- Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
     
-    <!-- React & Babel -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <script>
       tailwind.config = {
         theme: {
@@ -36,7 +31,7 @@
       }
     </script>
     <style>
-      body { background-color: #F2FAFC; -webkit-tap-highlight-color: transparent; }
+      body { background-color: #F2FAFC; -webkit-tap-highlight-color: transparent; font-family: 'Inter', 'Noto Sans TC', sans-serif; }
       .hide-scrollbar::-webkit-scrollbar { display: none; }
       .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       /* Line Colors */
@@ -46,12 +41,10 @@
       .bg-line-4 { background-color: #00A5DE; }
       .bg-line-5 { background-color: #996CAC; }
       .bg-line-6 { background-color: #CD7C2F; }
-      .bg-line-7 { background-color: #747F00; }
-      .bg-line-8 { background-color: #EA545D; }
-      .bg-line-9 { background-color: #BDB092; }
       .bg-line-arex { background-color: #0090D2; }
       .bg-line-walk { background-color: #94A3B8; }
       @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
     </style>
 <script type="importmap">
 {
@@ -67,538 +60,763 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
+      const { useState, useEffect, useMemo } = React;
 
-        // --- 核心資料 (Merged from constants.ts & types.ts) ---
-        const TRIP_DATA = {
-          "2025-12-21": {
-              title: "Day 1 / 抵達首爾",
-              subtitle: "Airport to Cheongnyangni",
-              weather: { t: "4°C", i: "fa-cloud-moon", tip: "微冷，建議穿著防風外套" },
-              discovery: {
-                  title: "清涼里的老派浪漫",
-                  desc: "清涼里是通往江原道的鐵路樞紐，這裡有復古的傳統市場。推薦去京東市場尋寶！",
-                  spots: [{ name: "清涼里奶奶冷麵 (청량리 할머니냉면)", desc: "著名超辣冷麵，在市場巷弄內。" }, { name: "京東市場星巴克1960 (스타벅스 경動1960)", desc: "廢棄老劇院改建的超復古咖啡廳。" }]
-              },
-              items: [
-                  { type: "flight", airline: "Scoot 酷航", code: "TR896", from: "TPE", fromCity: "台北桃園", fromTime: "18:15", to: "ICN", toCity: "首爾仁川", toTime: "21:45", bag: "35kg", title: "Flight TR896" },
-                  { 
-                      type: "transport", time: "22:40", title: "機場前往清涼里", sub: "AREX + 地鐵1號線", tags: ["最快路線"], desc: "入境後跟隨黃色文字「Airport Railroad」指標移動。", tips: "AREX直達車末班約 22:48，請務必把握時間。若趕不上，可改搭 6002 號機場巴士。" 
-                  },
-                  { type: "transit", title: "Transfer", from: "仁川機場 T1", to: "清涼里站", steps: [{ color: "bg-line-arex", name: "AREX 機場快線", desc: "往 首爾站 (直達)", time: "43分鐘" }, { color: "bg-line-1", name: "1號線", desc: "首爾站轉乘 (搭乘6站)", time: "18分鐘" }] },
-                  { type: "hotel", time: "00:10", title: "入住 Check-in", sub: "Hotel The Designers", address: "226 Wangsan-ro, Dongdaemun-gu, Seoul", mapQuery: "호텔더디자이너스청량리", tags: ["Agoda"], exit: "4號出口", desc: "位於清涼里站 4 號出口，步行約 2 分鐘即達。", tips: "飯店樓下有便利商店，建議先買好隔天早餐與水。" },
-                  { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "GS25 便利商店", desc: "就在飯店大樓 1樓 或緊鄰的巷子。" }, { name: "清涼里炸雞胡同", desc: "推薦「南原炸雞」，營業至深夜。" }, { name: "布帳馬車 (路邊攤)", desc: "車站前廣場通常有魚板湯、辣炒年糕。" } ] }
-              ]
+      // --- CONSTANTS ---
+      const TRIP_DATA = {
+        "2025-12-21": {
+          title: "Day 1 / 抵達首爾",
+          subtitle: "Airport to Cheongnyangni",
+          weather: { t: "4°C", i: "fa-cloud-moon", tip: "微冷，建議穿著防風外套" },
+          discovery: {
+            title: "清涼里的老派浪漫",
+            desc: "清涼里是通往江原道的鐵路樞紐。這裡有復古的傳統市場。推薦去京東市場尋寶！",
+            spots: [
+              { name: "清涼里奶奶冷麵 (청량리 할머니냉면)", desc: "著名超辣冷麵，在市場巷弄內。" },
+              { name: "京東市場星巴克1960 (스타벅스 경동1960)", desc: "廢棄老劇院改建的超復古咖啡廳。" }
+            ]
           },
-          "2025-12-22": {
-              title: "Day 2 / 前往雪場",
-              subtitle: "High 1 Resort",
-              weather: { t: "-5°C", i: "fa-snowflake", tip: "極冷，請穿發熱衣+雪衣" },
-              discovery: { title: "從煤礦到雪場", desc: "High 1 所在的古汗邑曾是繁榮的煤礦村。這裡的韓牛和野菜非常有名。", spots: [{ name: "古汗市場 (Gohan Market)", desc: "有便宜的烤肉店 and 傳統湯飯。" }] },
-              items: [
-                  { type: "transport", time: "07:00", title: "集合 (切勿遲到)", sub: "清涼里站 Olive Young 前", desc: "請在火車站內的 Olive Young 前集合。", tags: ["早起注意"], tips: "7:25 火車準時發車，逾時不候。" },
-                  { type: "transport", time: "07:25", title: "火車出發", sub: "前往舍北站", desc: "搭乘火車前往江原道，車程約 3.5 小時。", tags: ["車程 3.5hr"] },
-                  { type: "activity", time: "11:05", title: "抵達 High 1", sub: "滑雪度假村", desc: "抵達 Mountain Ski House。", address: "265 High1-gil, Sabuk-eup, Jeongseon-gun", mapQuery: "하이원리조트 마운틴스키하우스" },
-                  { type: "activity", time: "11:10", title: "挑選滑雪衣", sub: "租借裝備", desc: "挑選適合尺寸。檢查口袋拉鍊。", tags: ["租借"] },
-                  { type: "activity", time: "12:30", title: "領取裝備 & 付尾款", sub: "Ski House", desc: "領取滑雪板、雪鞋。**需以現金支付尾款**。", tags: ["準備現金"], tips: "需要 500韓元硬幣使用置物櫃。" },
-                  { type: "activity", time: "12:50", title: "滑雪課程開始", sub: "Day 1 課程", desc: "教學：穿脫裝備、安全跌倒、基礎煞車 (Pizza)。", tags: ["教學 3hr"] },
-                  { type: "hotel", time: "16:30", title: "入住 Ski House", sub: "Check-in", address: "265 High1-gil, Sabuk-eup, Jeongseon-gun", mapQuery: "하이원리조트 마운틴콘도" },
-                  { type: "activity", time: "18:30", title: "夜間滑雪", sub: "Night Ski", desc: "自由滑雪時間。開放至 22:00。", tags: ["開放至 22:00"] },
-                  { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "Condo 便利商店", desc: "Mountain Ski House 或 Condo B1 通常有 CU 或 GS25。" }, { name: "外送炸雞", desc: "可叫 Pelicana 或 Mexicana 炸雞，在 Lobby 取餐。" } ] }
-              ]
+          items: [
+            { type: "flight", airline: "Scoot 酷航", code: "TR896", from: "TPE", fromCity: "台北桃園", fromTime: "18:15", to: "ICN", toCity: "首爾仁川", toTime: "21:45", bag: "35kg", title: "Flight TR896" },
+            { 
+              type: "transport", time: "22:40", title: "機場前往清涼里", sub: "AREX + 地鐵1號線", tags: ["最快路線", "重要"], 
+              desc: "入境後跟隨黃色文字「Airport Railroad」指標移動。請先在超商加值 T-money。", 
+              tips: "AREX 直達車末班約 22:48，請務必把握時間。若趕不上，可改搭 6002 號機場巴士（末班約 23:30）。" 
+            },
+            { type: "transit", title: "Transfer", from: "仁川機場 T1", to: "清涼里站", steps: [{ color: "bg-line-arex", name: "AREX", desc: "往 首爾站 (直達)", time: "43分鐘" }, { color: "bg-line-1", name: "1號線", desc: "首爾站轉乘 (搭乘6站)", time: "18分鐘" }] },
+            { 
+              type: "hotel", time: "00:10", title: "入住 Hotel The Designers", sub: "清涼里站 4號出口", 
+              address: "226 Wangsan-ro, Dongdaemun-gu, Seoul", 
+              mapQuery: "호텔더디자이너스청량리",
+              tags: ["Agoda已付"], 
+              exit: "4號出口", 
+              desc: "飯店就在 4 號出口步行 2 分鐘處。樓下即有便利商店。",
+              tips: "飯店提供免費瓶裝水。若不夠可至樓下 GS25 採買。建議先買好隔天早餐。" 
+            },
+            { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "GS25 便利商店", desc: "飯店大樓 1樓，可買香蕉牛奶。" }, { name: "清涼里炸雞胡同", desc: "推薦「南原炸雞」，傳統市場風味，份量極大。" }, { name: "布帳馬車 (路邊攤)", desc: "車站前廣場通常有熱呼呼的魚板湯與辣炒年糕。" } ] }
+          ]
+        },
+        "2025-12-22": {
+          title: "Day 2 / 前往雪場",
+          subtitle: "High 1 Resort",
+          weather: { t: "-5°C", i: "fa-snowflake", tip: "極冷，請穿發熱衣+雪衣" },
+          discovery: {
+            title: "舍北與古汗的煤礦往事",
+            desc: "這裡曾是韓國最重要的煤礦產地，如今轉型為滑雪與博弈觀光區。小鎮充滿了昭和與現代交織的氛圍。",
+            spots: [
+              { name: "舍北傳統市場 (사북전통시장)", desc: "火車站旁，有許多道地的煤礦工人餐廳。" },
+              { name: "江原樂園賭場 (Kangwon Land)", desc: "韓國唯一允許本國人進入的賭場。" }
+            ]
           },
-          "2025-12-23": {
-              title: "Day 3 / 全日滑雪",
-              subtitle: "Ski & Relax",
-              weather: { t: "-8°C", i: "fa-snowflake", tip: "山頂風大，務必戴護目鏡" },
-              discovery: { title: "雲端上的咖啡廳", desc: "High 1 擁有韓國海拔最高的旋轉咖啡廳 (1340m)。", spots: [{ name: "Top of the Top", desc: "搭纜車上山頂，360度欣賞雪景。" }, { name: "古汗邑烤肉", desc: "晚餐建議下山去吃韓式烤肉。" }] },
-              items: [
-                  { type: "activity", time: "09:00", title: "滑雪課程 Day 2", sub: "進階技巧", tags:["教學 3hr"] },
-                  { type: "food", time: "12:00", title: "課程結束 & 午餐", sub: "Ski House", tags:["休息"] },
-                  { type: "activity", time: "13:30", title: "Top of the Top", sub: "觀光纜車推薦", desc: "海拔 1340m 山頂旋轉咖啡廳。", tags:["必去"] },
-                  { type: "activity", time: "18:30", title: "夜間滑雪", sub: "Night Ski", tags:["開放至 22:00"] },
-                  { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "古汗市場 (Gohan Market)", desc: "市場內的湯飯 (Gukbap) 是絕佳選擇。" } ] }
-              ]
+          items: [
+            { type: "transport", time: "07:00", title: "集合 (切勿遲到)", sub: "清涼里站 Olive Young 前", tags: ["早起注意", "絕對準時"], tips: "7:25 火車準時發車。請預留時間買早餐在車上吃。" },
+            { type: "transport", time: "07:25", title: "火車出發", sub: "前往舍北站 (Sabuk)", desc: "車程約 3.5 小時，可在車上補眠。沿途山景非常美。", tags: ["車程 3.5hr"] },
+            { type: "transport", time: "10:55", title: "抵達舍北站", desc: "Sabuk Station 轉乘接駁車前往度假村。" },
+            { type: "activity", time: "11:05", title: "抵達 High 1", sub: "Mountain Ski House", address: "265 High1-gil, Sabuk-eup, Jeongseon-gun", mapQuery: "하이원리조트 마운틴스키하우스" },
+            { type: "activity", time: "11:10", title: "挑選滑雪衣", sub: "租借裝備", tags: ["租借"], desc: "挑選適合尺寸與喜歡的配色。請檢查口袋拉鍊是否正常。" },
+            { 
+              type: "activity", time: "12:30", title: "領取硬體 & 付尾款", sub: "Ski House", 
+              desc: "領取滑雪板、雪鞋。**需以現金支付教練尾款**。", 
+              tags: ["準備現金", "重要"], 
+              tips: "需要 500 韓元硬幣使用置物櫃，可在 Ski House 換幣機兌換。" 
+            },
+            { 
+              type: "activity", time: "12:50", title: "滑雪課程開始", sub: "Day 1 基礎教學", 
+              tags: ["教學 3hr"], 
+              desc: "學習：正確穿脫裝備、安全跌倒與站起、基礎煞車 (Pizza 煞)。" 
+            },
+            { type: "hotel", time: "16:30", title: "入住 Ski House", sub: "Check-in", desc: "進房放行李、稍作休息。舒緩腿部肌肉。", mapQuery: "하이원리조트 마운틴콘도" },
+            { type: "activity", time: "18:30", title: "夜間滑雪", sub: "Night Ski", tags: ["自由練習"], desc: "夜間雪場光線極佳，人較少，適合練習基礎動作。" },
+            { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "Condo 便利商店", desc: "買泡麵、啤酒、飲料。韓國泡麵配雪景必吃。" }, { name: "外送炸雞", desc: "推薦 Pelicana 或 Mexicana，需在 Condo 大廳取貨。" } ] }
+          ]
+        },
+        "2025-12-23": {
+          title: "Day 3 / 全日滑雪",
+          subtitle: "Ski & Relax",
+          weather: { t: "-8°C", i: "fa-snowflake", tip: "山頂風大，務必戴護目鏡" },
+          discovery: {
+            title: "雪場高處的秘境",
+            desc: "High 1 以雪質優良著稱。除了滑雪，山頂的藝術與壁畫也是亮點。",
+            spots: [
+              { name: "古汗 18 街 (고한 18번가)", desc: "老巷弄改建的壁畫藝術村，非常有懷舊感。" },
+              { name: "Mountain Top", desc: "海拔 1340m，是滑雪場的最高點，風景極佳。" }
+            ]
           },
-          "2025-12-24": {
-              title: "Day 4 / 返回首爾",
-              subtitle: "Christmas Eve",
-              weather: { t: "-2°C", i: "fa-tree", tip: "平安夜人多，注意保暖" },
-              discovery: { title: "平安夜的首爾", desc: "首爾的聖誕氣氛非常濃厚，尤其是明洞教堂燈飾。", spots: [{ name: "軍子大韓烤腸", desc: "華莎推薦的烤腸名店！" }, { name: "明洞聖堂", desc: "平安夜最美的地方。" }] },
-              items: [
-                  { type: "hotel", time: "08:20", title: "退房 Check-out", sub: "整理行李", tags:["退房"] },
-                  { type: "activity", time: "15:45", title: "歸還裝備 & 集合", sub: "Mountain Ski House", tags:["集合"] },
-                  { type: "transport", time: "16:20", title: "巴士回首爾", sub: "準時發車", desc: "車程約 3.5 小時。", tags:["回程"] },
-                  { type: "transport", time: "19:45", title: "抵達 明洞站", sub: "解散", tags:["抵達"] },
-                  { 
-                      type: "food", time: "20:15", title: "晚餐：軍子大韓烤腸", sub: "明洞店", 
-                      desc: "華莎同款！享受火焰秀表演！", 
-                      naverLink: "https://map.naver.com/v5/search/군자대한곱창%20명동점", tags: ["平安夜大餐"] 
-                  },
-                  { 
-                      type: "list", time: "21:30", title: "明洞購物衝刺", 
-                      list: ["<b>Olive Young</b> 旗艦店", "<b>NyuNyu</b> 明洞 (飾品)", "<b>Hemeko</b> (美妝選物)"],
-                      tags: ["購物"] 
-                  },
-                  { 
-                      type: "transit", title: "To Airbnb", from: "明洞", to: "上水站", 
-                      steps: [{ color: "bg-line-2", name: "2號線", desc: "乙支路入口 ➜ 合井" }, { color: "bg-line-6", name: "6號線", desc: "合井 ➜ 上水站", exit: "3號出口" }]
-                  },
-                  { type: "hotel", time: "23:45", title: "入住 Airbnb", sub: "Host: Dada", address: "52 Tojeong-ro 11-gil, Mapo-gu, Seoul", exit: "3號出口", tips: "請確認房東密碼。" }
-              ]
+          items: [
+            { type: "activity", time: "09:00", title: "滑雪課程 Day 2", tags:["教學 3hr"], desc: "進階練習：重心轉移、S 型轉彎 (C-Turn) 基礎。嘗試從較高的緩坡滑下。" },
+            { type: "activity", time: "12:00", title: "課程結束 & 午餐", sub: "自由用餐", desc: "Ski House 餐廳有石鍋拌飯與炸豬排。" },
+            { 
+              type: "activity", time: "13:30", title: "Top of the Top", sub: "山頂旋轉咖啡廳", 
+              desc: "海拔 1340m 山頂，360 度雪景拍照。即使不滑雪也必搭纜車上來。", 
+              tags:["必去", "拍照聖地"] 
+            },
+            { type: "activity", time: "18:30", title: "最後夜間滑雪", tags:["Night Ski"], desc: "把握最後在雪場滑行的機會。注意體力分配。" },
+            { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "古汗市場湯飯", desc: "搭接駁車下山吃熱呼呼的湯飯（血腸湯/豬肉湯）。" }, { name: "韓式五花肉烤肉", desc: "古汗邑有很多比度假村內便宜且道地的烤肉店。" } ] }
+          ]
+        },
+        "2025-12-24": {
+          title: "Day 4 / 返回首爾",
+          subtitle: "Christmas Eve",
+          weather: { t: "-2°C", i: "fa-tree", tip: "平安夜人多，注意保暖" },
+          discovery: {
+            title: "明洞的聖誕奇蹟",
+            desc: "首爾最濃聖誕氣氛就在明洞。各大百貨的外牆點燈是每年的重頭戲。",
+            spots: [
+              { name: "新世界百貨總店 (Shinsegae)", desc: "著名的媒體牆聖誕點燈，非常震撼。" },
+              { name: "樂天百貨聖誕村 (Lotte)", desc: "百貨外的聖誕市集與大型裝飾。" }
+            ]
           },
-          "2025-12-25": { 
-              title: "Day 5 / 聖誕快樂", subtitle: "Seongsu & Majang", weather: { t: "0°C", i: "fa-gift", tip: "適合大衣，圍巾必備" },
-              discovery: {
-                  title: "聖水洞：首爾的布魯克林",
-                  desc: "廢棄工廠改建的潮牌聚集地。",
-                  spots: [{ name: "NUDAKE", desc: "必點『抹茶岩漿牛角』。" }, { name: "Dior 聖水", desc: "超美的玻璃溫室建築。" }]
-              },
-              items: [
-                  { 
-                      type: "transit", title: "Transit", from: "上水站", to: "聖水洞", 
-                      steps: [{ color: "bg-line-6", name: "6號線", desc: "上水 ➜ 合井" }, { color: "bg-line-2", name: "2號線", desc: "合井 ➜ 聖水站" }]
-                  },
-                  { 
-                      type: "food", time: "12:30", title: "午餐：南紅本家一隻雞", sub: "聖水店", exit: "聖水站 4號出口",
-                      desc: "當地人激推！湯頭鮮甜，雞肉軟嫩。聖誕暖胃首選。", 
-                      naverLink: "https://map.naver.com/v5/search/남다른본가닭한마리%20성수점",
-                      mapQuery: "남다른본가닭한마리 성수점",
-                      tips: "必點『刀切麵』跟『雞蛋粥』！", 
-                      tags: ["在地美食", "聖水必吃"] 
-                  },
-                  { 
-                      type: "list", time: "14:00", title: "聖水洞：潮牌巡禮", 
-                      list: ["<b>Onion</b> (廢墟風咖啡)", "<b>自然島鹽麵包</b>", "<b>Matin Kim</b> / <b>Musinsa</b>", "<b>Rockfish</b> / <b>Stand Oil</b>"],
-                      tags:["潮牌", "必逛"] 
-                  },
-                  { 
-                      type: "list", time: "15:30", title: "聖水洞：質感生活", 
-                      list: ["<b>Tamburins</b> / <b>Nonfiction</b>", "<b>Point of View</b> (文具)", "<b>NyuNyu</b> 聖水"],
-                      tags:["質感", "香氛"] 
-                  },
-                  { 
-                      type: "transit", title: "Transit", from: "聖水洞", to: "馬場洞", 
-                      steps: [{ color: "bg-line-2", name: "2號線", desc: "聖水 ➜ 往十里" }, { color: "bg-line-5", name: "5號線", desc: "往十里 ➜ 馬場站", exit: "2號出口" }]
-                  },
-                  { 
-                      type: "food", time: "19:00", title: "晚餐：馬場洞韓牛村", sub: "馬場站", exit: "2號出口",
-                      desc: "現選現烤。推薦: 雪花里脊 (Salchisal)。", 
-                      naverLink: "https://map.naver.com/v5/search/마장축산물시장",
-                      tags: ["韓牛", "聖誕大餐"] 
-                  },
-                  { type: "activity", time: "20:30", title: "東大門夜逛", desc: "NyuNyu 飾品、DDP 夜景。", tags:["夜貓行程"] },
-                  { type: "snack", title: "聖誕宵夜 (外送推薦)", items: [ { name: "Puradak (푸라닭炸雞) 上水店", desc: "聖誕節外送首選！推薦『青陽美乃滋』。" }, { name: "族長豬腳 (Jokjang)", desc: "大口吃肉首選。" } ] }
-              ] 
+          items: [
+            { type: "hotel", time: "08:20", title: "整理行李 & 退房", tags:["退房"] },
+            { type: "activity", time: "15:45", title: "歸還裝備 & 集合", sub: "Mountain Ski House", tags:["集合"], tips: "請確認所有租借物品（含纜車卡）皆已歸還。" },
+            { type: "transport", time: "16:20", title: "巴士回首爾", desc: "直達巴士返回首爾，預計抵達明洞站。車程約 3.5 小時。", tags:["回程"] },
+            { type: "transport", time: "19:45", title: "抵達 明洞站", desc: "下車後步行前往餐廳。感受平安夜的首爾街頭氣氛。" },
+            { 
+              type: "food", time: "20:15", title: "晚餐：軍子大韓烤腸", sub: "明洞店", 
+              desc: "<b>華莎同款！</b> 火焰秀烤腸表演。必點：綜合烤腸。最後一定要點『大韓炒飯』！", 
+              tags: ["平安夜大餐", "必吃", "火燒秀"], 
+              naverLink: "https://map.naver.com/v5/search/군자대한곱창%20명동점" 
+            },
+            { type: "list", time: "21:30", title: "明洞聖誕購物", list: ["<b>Olive Young</b> 旗艦店 (聖誕限定折扣)", "<b>NyuNyu</b> 明洞店 (飾品天堂)", "<b>Hemeko</b> (質感美妝選物)"], tags:["購物"] },
+            { 
+              type: "transit", title: "前往 Airbnb", from: "明洞", to: "上水站", 
+              steps: [{ color: "bg-line-2", name: "2號線", desc: "乙支路入口 ➜ 合井" }, { color: "bg-line-6", name: "6號線", desc: "合井 ➜ 上水站", exit: "3號出口" }] 
+            },
+            { type: "hotel", time: "23:45", title: "入住 Airbnb", sub: "Host: Dada", address: "52 Tojeong-ro 11-gil, Mapo-gu, Seoul", exit: "3號出口", tips: "請確認房東提供的密碼鎖。進屋後請開啟地熱。" },
+            { type: "snack", title: "深夜補給 & 宵夜", items: [ { name: "BHC 炸雞", desc: "黃金橄欖油炸雞是首選。" }, { name: "CU 便利商店", desc: "買些氣泡水與韓國小零食。" } ] }
+          ]
+        },
+        "2025-12-25": { 
+          title: "Day 5 / 聖誕快樂", 
+          subtitle: "Seongsu Fashion Tour", 
+          weather: { t: "0°C", i: "fa-gift", tip: "聖水洞熱門店位需排隊" },
+          discovery: {
+            title: "聖水洞：首爾最紅潮流地標",
+            desc: "今日行程集中在聖水洞環狀逛街區，涵蓋了所有的 26 個必逛店位。",
+            spots: [
+              { name: "Dior 聖水", desc: "極美的透明建築，聖誕點燈必拍。" },
+              { name: "Musinsa 大林倉庫", desc: "聖水洞地標潮流選物店。" }
+            ]
           },
-          "2025-12-26": { 
-              title: "Day 6 / 懷舊首爾", subtitle: "Bukchon & Seochon & Ikseon", weather: { t: "2°C", i: "fa-camera", tip: "穿舒適好走的鞋子" }, 
-              discovery: {
-                  title: "鍾路區的時光旅行",
-                  desc: "北村韓屋、西村文青、益善洞燈火。",
-                  spots: [{ name: "土俗村蔘雞湯", desc: "景福宮旁經典。" }, { name: "清水堂", desc: "絕美燈籠水景。" }]
-              },
-              items: [
-                  { type: "food", time: "10:30", title: "早午餐：Artist Bakery", desc: "專賣鹽麵包。建議先抽號碼牌。", tags: ["鹽麵包"] },
-                  { type: "activity", time: "11:30", title: "北村韓屋村", tags: ["文化體驗"] },
-                  { type: "food", time: "13:30", title: "午餐：土俗村蔘雞湯", desc: "冬天吃非常過癮。", tags: ["必吃"], naverLink: "https://map.naver.com/v5/search/토속촌삼계탕" },
-                  { type: "list", time: "15:00", title: "西村文青散策", list: ["<b>Granhand</b> 西村", "<b>Ofr Seoul</b>", "<b>Scoff Bakehouse</b>"], tags: ["文青"] },
-                  { type: "list", time: "17:30", title: "益善洞迷宮", list: ["<b>清水堂</b>", "<b>小夏鹽田</b>", "<b>樂園驛</b>"], tags: ["網美聖地"] },
-                  { type: "snack", title: "最後一晚宵夜", items: [ { name: "60-gye Chicken (60계치킨)", desc: "推薦『虎味炸雞』！" }, { name: "漢江泡麵", desc: "體力夠就去漢江公園煮泡麵。" } ] }
-              ] 
+          items: [
+            { type: "transit", title: "前往聖水洞", from: "上水站", to: "聖水站", steps: [{ color: "bg-line-6", name: "6號線", desc: "上水 ➜ 合井" }, { color: "bg-line-2", name: "2號線", desc: "合井 ➜ 聖水站" }] },
+            { 
+              type: "food", time: "12:30", title: "午餐：南紅本家一隻雞", sub: "聖水店", exit: "4號出口",
+              desc: "在地人強推！湯頭鮮甜，雞肉軟嫩。必加『刀切麵』與『雞蛋粥』。", 
+              naverLink: "https://map.naver.com/v5/search/남다른본가닭한마리%20성수점",
+              tags: ["暖胃首選", "聖水必吃"] 
+            },
+            { 
+              type: "list", time: "14:00", title: "聖水東側：經典與潮牌", sub: "聖水站周邊", 
+              list: [
+                "<b>Onion Seongsu</b> (廢墟風工業咖啡)",
+                "<b>自然島鹽麵包</b> (招牌鹽麵包必買)",
+                "<b>Musinsa Store</b> (大林倉庫潮流店)",
+                "<b>New Balance</b> (聖水旗艦店)",
+                "<b>Rockfish Weatherwear</b> (質感英倫雨鞋/服飾)",
+                "<b>NyuNyu</b> (聖水飾品大本營)",
+                "<b>Matin Kim</b> (當紅人氣服飾品牌)",
+                "<b>Rolarola</b> (可愛風少女服飾)",
+                "<b>Beaker</b> (高端質感選物店)"
+              ],
+              tags:["時尚潮流", "必逛"] 
+            },
+            { 
+              type: "list", time: "15:30", title: "聖水中央：香氛與美學", sub: "演武場街核心", 
+              list: [
+                "<b>Point of View</b> (精品文具界的天花板)",
+                "<b>Tamburins</b> (Jennie 專屬香氛空間)",
+                "<b>Nonfiction</b> (韓國小眾香氛洗護)",
+                "<b>Kinfolk Notes</b> (簡約質感香氛)",
+                "<b>SW19</b> (以一天不同時刻命名的香氛)",
+                "<b>Ader Error</b> (太空實驗室概念設計)",
+                "<b>emis</b> (爆紅帽子、包包品牌)",
+                "<b>BADBLOOD</b> (歐美辣妹風潮流服飾)",
+                "<b>TETO</b> (彩色質感毛巾專門店)",
+                "<b>MUUT</b> (極簡風格眼鏡店)"
+              ],
+              tags:["美學空間", "香氛"] 
+            },
+            { 
+              type: "list", time: "17:00", title: "聖水西側：精選與美妝", sub: "纛島站方向", 
+              list: [
+                "<b>Mardi Mercredi</b> (經典小雛菊系列)",
+                "<b>fwee Agit</b> (爆紅布丁唇釉美妝)",
+                "<b>Poset</b> (明信片圖書館)",
+                "<b>BriBeet</b> (西式精緻輕食)",
+                "<b>Fogsu</b> (質感小眾選物服飾)",
+                "<b>KHIHO</b> (工業概念店)",
+                "<b>Olive Young</b> (聖水站最後補貨)"
+              ],
+              tags:["必買名單", "美妝"] 
+            },
+            { type: "transit", title: "前往馬場洞", from: "聖水洞", to: "馬場站", steps: [{ color: "bg-line-2", name: "2號線", desc: "聖水 ➜ 往十里" }, { color: "bg-line-5", name: "5號線", desc: "往十里 ➜ 馬場站", exit: "2號出口" }] },
+            { 
+              type: "food", time: "19:00", title: "晚餐：馬場洞韓牛大餐", sub: "馬場站 2號出口",
+              desc: "聖誕韓牛饗宴！現選現切現烤。推薦：『雪花里脊 (Salchisal)』與『橫隔膜肉』。", 
+              naverLink: "https://map.naver.com/v5/search/마장축산물시장",
+              tags: ["韓牛", "聖誕大餐", "1++等級"] 
+            },
+            { type: "activity", time: "21:00", title: "東大門夜遊", desc: "DDP 玫瑰燈海/夜景、NyuNyu 飾品總店（深夜不打烊）。" },
+            { type: "snack", title: "深夜宵夜 (外送)", items: [ { name: "Puradak 炸雞", desc: "推薦：青陽美乃滋口味，清爽不膩。" }, { name: "漢江泡麵", desc: "利用自助煮麵機，體驗韓劇氛圍。" } ] }
+          ] 
+        },
+        "2025-12-26": { 
+          title: "Day 6 / 懷舊首爾", 
+          subtitle: "Bukchon & Ikseon", 
+          weather: { t: "2°C", i: "fa-camera", tip: "穿著舒適好走的鞋子" }, 
+          discovery: {
+            title: "老城區的文藝氣息",
+            desc: "安國站周邊是首爾歷史與現代融合最好的地方。西村與益善洞各有不同風味。",
+            spots: [
+              { name: "西村 (Seochon)", desc: "許多藝術家居住，有許多隱藏的小畫廊。" },
+              { name: "通仁市場 (Tongin Market)", desc: "可以體驗用銅幣買便當的古老市場。" }
+            ]
           },
-          "2025-12-27": {
-              title: "Day 7 / 滿載而歸", subtitle: "Bye Seoul", weather: { t: "3°C", i: "fa-plane" },
-              items: [
-                  { type: "activity", time: "11:40", title: "首爾站：寄放行李", tags: ["重要"] },
-                  { 
-                      type: "food", time: "12:30", title: "午餐：Sosiniso (소신이쏘)", sub: "新村站",
-                      desc: "必點『奶油燉排骨』！", tags: ["排隊名店"] 
-                  },
-                  { type: "shopping", time: "14:30", title: "Perfumery Blute", sub: "漢南店", tags: ["漢南洞", "香氛"] },
-                  { type: "shopping", time: "16:00", title: "樂天超市", sub: "首爾站店", desc: "最後採買伴手禮。現場可退稅。", tags: ["必買"] },
-                  { type: "transport", time: "20:00", title: "前往機場", sub: "AREX 直達車" },
-                  { type: "flight", airline: "Scoot 酷航", code: "TR897", from: "ICN", to: "TPE", bag: "50kg", title: "Flight TR897" }
-              ]
+          items: [
+            { 
+              type: "transit", title: "前往安國", from: "上水站", to: "安國站", 
+              steps: [{ color: "bg-line-6", name: "6號線", desc: "上水 ➜ 合井" }, { color: "bg-line-2", name: "2號線", desc: "合井 ➜ 乙支路3街" }, { color: "bg-line-3", name: "3號線", desc: "乙支路3街 ➜ 安國" }] 
+            },
+            { type: "food", time: "10:30", title: "Artist Bakery", sub: "安國站 1號出口", tags: ["鹽麵包"], desc: "倫敦貝果姐妹店，專賣各式鹽麵包。必吃：松露鹽麵包。" },
+            { type: "activity", time: "11:30", title: "北村韓屋村", tags: ["拍照"], desc: "歷史悠久的韓屋聚落，步行時請保持安靜。" },
+            { type: "food", time: "13:30", title: "午餐：土俗村蔘雞湯", tags: ["必吃", "暖胃"], desc: "首爾最經典的蔘雞湯。湯頭濃郁，雞肉塞滿糯米。" },
+            { type: "list", time: "15:00", title: "西村文青散策", list: ["<b>Granhand</b> (質感香氛)", "<b>Ofr Seoul</b> (選物店)", "<b>Scoff</b> (司康店)"], tags: ["文青必訪"] },
+            { type: "list", time: "17:30", title: "益善洞迷宮", list: ["<b>清水堂</b> (絕美燈籠)", "<b>小夏鹽田</b>", "<b>樂園驛</b>"], tags: ["復古浪漫"] },
+            { type: "food", time: "19:30", title: "晚餐：昌華堂", sub: "益善洞", desc: "煎餃名店，內部裝潢充滿復古韓式風味。" },
+            { type: "snack", title: "深夜宵夜", items: [ { name: "60-gye Chicken", desc: "推薦：虎味炸雞 (Tiger Chicken)，甜辣酥脆。" }, { name: "望遠市場炸雞", desc: "如果還在上水附近，望遠市場也是好選擇。" } ] }
+          ] 
+        },
+        "2025-12-27": {
+          title: "Day 7 / 滿載而歸", 
+          subtitle: "Bye Seoul", 
+          weather: { t: "3°C", i: "fa-plane" },
+          discovery: {
+            title: "首爾站與漢南洞的交織",
+            desc: "最後一天在首爾站補貨，順道去時髦的漢南洞。完美的收尾路線。",
+            spots: [
+              { name: "首爾路 7017", desc: "高架道路改建的空中步道，直通首爾站。" },
+              { name: "漢南洞質感巷弄", desc: "品牌店與小眾香氛的集中地。" }
+            ]
+          },
+          items: [
+            { type: "hotel", time: "11:00", title: "最後退房 Check-out", tags:["退房"] },
+            { type: "activity", time: "11:40", title: "首爾站：寄放行李", tags: ["重要"], desc: "利用首爾站內的 Lotte Mart 或 T-Luggage 服務寄放行李。" },
+            { type: "food", time: "12:30", title: "午餐：Sosiniso (소신이쏘)", sub: "新村站", desc: "奶油燉排骨名店。必點：奶油牛肉排骨。", tags: ["排隊名店"] },
+            { 
+              type: "shopping", time: "14:30", title: "Perfumery Blute", sub: "漢南店", 
+              desc: "充滿氛圍感的紅磚屋香氛展示間。推薦尋找專屬您的香味。", 
+              tags: ["漢南洞", "香氛"]
+            },
+            { type: "shopping", time: "16:00", title: "樂天超市採買", sub: "首爾站店", desc: "最後伴手禮大採購。滿額可現場直接退稅。", tags: ["必買", "退稅"] },
+            { type: "flight", airline: "Scoot 酷航", code: "TR897", from: "ICN", fromTime: "23:00", to: "TPE", toTime: "00:45", bag: "50kg", title: "Flight TR897" },
+            { type: "transport", time: "20:00", title: "前往機場", sub: "AREX 直達車", desc: "首爾站出發直達仁川機場。請提早 3 小時抵達機場。" },
+            { type: "snack", title: "機場最後補給", items: [ { name: "貢茶 / 星巴克", desc: "在機場最後喝一杯飲料。" }, { name: "便利商店零食", desc: "清空 T-money 卡餘額的好地方。" } ] }
+          ]
+        }
+      };
+
+      const PHRASES = [
+        { k: "안녕하세요", p: "An-nyeong-ha-se-yo", m: "你好 (Hello)" },
+        { k: "감사합니다", p: "Gam-sa-ham-ni-da", m: "謝謝 (Thank you)" },
+        { k: "얼마예요?", p: "Eol-ma-ye-yo?", m: "多少錢? (How much?)" },
+        { k: "화장실 어디예요?", p: "Hwa-jang-sil eo-di-ye-yo?", m: "廁所在哪? (Where is toilet?)" },
+        { k: "이거 주세요", p: "I-geo ju-se-yo", m: "請給我這個 (This one please)" },
+        { k: "물 주세요", p: "Mul ju-se-yo", m: "請給我水 (Water please)" },
+        { k: "영수증 주세요", p: "Yeong-su-jeung ju-se-yo", m: "請給我收據 (Receipt please)" },
+        { k: "맛있어요", p: "Ma-si-sseo-yo", m: "好吃 (Delicious)" }
+      ];
+
+      // --- COMPONENTS ---
+
+      const TagPill = ({ text }) => {
+        let colorClass = "bg-slate-100 text-slate-600 border-slate-200";
+        if (text.includes("必") || text.includes("租") || text.includes("金") || text.includes("付")) {
+          colorClass = "bg-orange-50 text-orange-700 border-orange-100";
+        } else if (text.includes("重") || text.includes("準時") || text.includes("遲") || text.includes("注") || text.includes("教") || text.includes("車")) {
+          colorClass = "bg-blue-50 text-blue-700 border-blue-100";
+        } else if (text.includes("吃") || text.includes("大餐") || text.includes("美食")) {
+          colorClass = "bg-rose-50 text-rose-700 border-rose-100";
+        }
+        return (
+          <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold mr-1.5 mb-1.5 border ${colorClass} leading-none uppercase tracking-wider`}>
+            {text}
+          </span>
+        );
+      };
+
+      const NaverButton = ({ url, query, address }) => {
+        const finalUrl = url || (query || address ? `https://map.naver.com/v5/search/${encodeURIComponent(query || address || '')}` : null);
+        if (!finalUrl) return null;
+        return (
+          <a href={finalUrl} target="_blank" rel="noreferrer" className="flex items-center justify-center bg-[#03C75A] text-white font-bold rounded-xl p-3 mt-4 text-sm w-full active:opacity-90 active:scale-95 transition-all shadow-sm">
+            <span className="font-black text-lg mr-2 font-serif">N</span> 開啟 Naver Map 導航
+          </a>
+        );
+      };
+
+      const BoardingPass = ({ item }) => (
+        <div className="bg-white rounded-[24px] shadow-md mb-6 border border-slate-200 overflow-hidden">
+          <div className="px-6 py-3 bg-white border-b border-slate-100 flex justify-between items-center">
+            <span className="text-[10px] font-bold tracking-widest opacity-50 uppercase">Boarding Pass</span>
+            <div className="flex items-center gap-2 text-slate-800">
+              <i className="fas fa-plane text-sm"></i>
+              <span className="font-bold text-xs uppercase">{item.airline}</span>
+            </div>
+          </div>
+          <div className="p-6">
+            <div className="flex justify-between items-end mb-4">
+              <div>
+                <div className="text-4xl font-black text-slate-900 font-mono tracking-tighter">{item.from}</div>
+                <div className="text-[10px] text-slate-500 font-bold mt-1 bg-slate-50 inline-block px-2 py-1 rounded border border-slate-100">{item.fromCity}</div>
+              </div>
+              <div className="flex-1 flex flex-col items-center px-4 pb-2">
+                <div className="text-xs font-mono font-bold text-blue-600 mb-1">{item.code}</div>
+                <div className="w-full h-[2px] bg-slate-200 relative">
+                  <div className="absolute right-0 -top-[3px] w-2 h-2 bg-slate-300 rounded-full"></div>
+                  <i className="fas fa-plane absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-slate-300 text-[10px] transform rotate-90"></i>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-4xl font-black text-blue-600 font-mono tracking-tighter">{item.to}</div>
+                <div className="text-[10px] text-slate-500 font-bold mt-1 bg-slate-50 inline-block px-2 py-1 rounded border border-slate-100">{item.toCity}</div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-8 pt-4 border-t border-dashed border-slate-200">
+              <div>
+                <div className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-widest">Departure</div>
+                <div className="text-xl font-bold text-slate-800 font-mono">{item.fromTime}</div>
+              </div>
+              <div className="text-right">
+                <div className="text-[10px] text-slate-400 uppercase font-bold mb-1 tracking-widest">Arrival</div>
+                <div className="text-xl font-bold text-blue-600 font-mono">{item.toTime}</div>
+              </div>
+            </div>
+            {item.bag && (
+              <div className="mt-4 flex items-center justify-center gap-2 text-[10px] font-bold text-slate-400 bg-slate-50 py-1.5 rounded-full border border-slate-100">
+                <i className="fas fa-suitcase-rolling"></i> ALLOWANCE: {item.bag}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+
+      const SnackCard = ({ item }) => (
+        <div className="bg-slate-800 text-slate-200 rounded-[28px] p-6 mb-6 shadow-xl relative overflow-hidden group">
+          <div className="absolute -top-10 -left-10 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-500"></div>
+          <div className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em] mb-4 flex items-center relative z-10">
+            <i className="fas fa-moon mr-2 text-indigo-400"></i> {item.title || '深夜補給'}
+          </div>
+          <div className="space-y-4 relative z-10">
+            {item.items?.map((s, idx) => {
+              const name = typeof s === 'string' ? s : s.name;
+              const desc = typeof s === 'string' ? '' : s.desc;
+              return (
+                <div key={idx} className="flex items-start border-b border-white/5 pb-4 last:border-0 last:pb-0">
+                  <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center mr-3 flex-shrink-0">
+                    <i className="fas fa-utensils text-yellow-500 text-[10px]"></i>
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-bold text-white text-sm">{name}</div>
+                    {desc && <div className="text-[11px] text-slate-400 mt-1 leading-relaxed">{desc}</div>}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      );
+
+      const TransitCard = ({ item }) => (
+        <div className="bg-white border border-slate-200 rounded-[24px] p-6 mb-5 shadow-sm">
+          <div className="flex justify-between items-center mb-5 pb-4 border-b border-slate-50">
+            <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center">
+                <i className="fas fa-route mr-2 text-blue-500"></i> 交通方式
+            </div>
+            <div className="text-xs font-black text-slate-900 flex items-center bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+              {item.from} <i className="fas fa-arrow-right mx-2 text-slate-300 text-[10px]"></i> {item.to}
+            </div>
+          </div>
+          <div className="space-y-0 relative">
+            {item.steps?.map((step, idx) => (
+              <div key={idx} className="flex items-start relative pb-7 last:pb-0 group">
+                {idx !== (item.steps?.length || 0) - 1 && (
+                    <div className="absolute left-[9px] top-3 bottom-0 w-[2px] bg-slate-100 group-hover:bg-slate-200 transition-colors"></div>
+                )}
+                <div className={`w-5 h-5 rounded-full z-10 flex-shrink-0 border-[3.5px] border-white shadow-sm mr-4 ${!step.color ? 'bg-slate-300' : ''} ${step.color || ''}`}></div>
+                <div className="flex-1 -mt-1">
+                    <div className="flex items-center mb-1.5 flex-wrap gap-2">
+                        <span className={`text-[10px] font-black text-white px-2 py-0.5 rounded-[6px] ${step.color || 'bg-slate-400'} min-w-[50px] text-center shadow-sm uppercase tracking-tighter`}>{step.name}</span>
+                        <span className="text-sm font-bold text-slate-800 leading-tight">{step.desc}</span>
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap mt-1">
+                        {step.dir && <span className="text-[10px] text-slate-500 font-bold bg-slate-50 px-2 py-0.5 rounded border border-slate-100">{step.dir}</span>}
+                        {step.exit && <span className="inline-flex items-center bg-amber-500 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">出口 {step.exit}</span>}
+                        {step.time && <div className="text-[10px] text-slate-400 flex items-center font-bold uppercase tracking-wider">約 {step.time}</div>}
+                    </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+      const ListCard = ({ item }) => (
+        <div className="bg-white rounded-[28px] p-7 mb-5 shadow-sm border border-slate-100 active:scale-[0.99] transition-all duration-150">
+          <div className="flex justify-between items-start mb-4">
+            <div className="text-[11px] font-black font-mono text-slate-400 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">{item.time}</div>
+            <div className="text-xs font-black text-slate-400 uppercase tracking-widest">{item.sub || item.subtitle}</div>
+          </div>
+          <h3 className="text-xl font-black text-slate-900 leading-tight mb-4 tracking-tight">{item.title}</h3>
+          {item.desc && <div className="text-sm text-slate-600 mb-5 leading-relaxed font-medium" dangerouslySetInnerHTML={{__html: item.desc}}></div>}
+          <div className="space-y-3 mb-6">
+            {item.list?.map((li, idx) => (
+              <div key={idx} className="flex items-start text-sm text-slate-700 relative pl-6 leading-relaxed">
+                  <span className="absolute left-0 top-2.5 w-2 h-2 rounded-full bg-blue-500/20 border border-blue-500/10"></span>
+                  <span dangerouslySetInnerHTML={{__html: li}}></span>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-1 mb-2">
+            {item.tags?.map((tag, idx) => <TagPill key={idx} text={tag} />)}
+          </div>
+          <NaverButton url={item.naverLink} query={item.mapQuery} address={item.address} />
+        </div>
+      );
+
+      const StandardCard = ({ item }) => {
+        const iconMap = { transport: "fa-train-subway", hotel: "fa-bed", food: "fa-utensils", shopping: "fa-bag-shopping", activity: "fa-person-skiing" };
+        const icon = iconMap[item.type] || "fa-circle";
+        const colorMap = { transport: "text-blue-500", hotel: "text-purple-500", food: "text-rose-500", shopping: "text-pink-500", activity: "text-cyan-500" };
+        const iconColor = colorMap[item.type] || "text-slate-500";
+
+        return (
+          <div className="bg-white rounded-[28px] p-7 mb-5 shadow-sm border border-slate-100 active:scale-[0.99] transition-all duration-150">
+            <div className="flex items-start gap-5">
+              <div className={`w-14 h-14 rounded-[20px] bg-slate-50 flex items-center justify-center text-2xl ${iconColor} border border-slate-100 flex-shrink-0 shadow-inner`}>
+                <i className={`fas ${icon}`}></i>
+              </div>
+              <div className="flex-1">
+                  <div className="flex justify-between items-center mb-1">
+                    <div className="text-[11px] font-mono font-black text-slate-400 tracking-wider">{item.time}</div>
+                    {item.exit && <span className="inline-flex items-center bg-amber-500 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">{item.exit}</span>}
+                  </div>
+                  <h3 className="text-xl font-black text-slate-900 leading-tight mb-2 tracking-tight">{item.title}</h3>
+                  <div className="text-xs font-bold text-slate-400 mb-3">{item.sub || item.subtitle}</div>
+                  <div className="flex flex-wrap gap-1">
+                      {item.tags?.map((tag, idx) => <TagPill key={idx} text={tag} />)}
+                  </div>
+              </div>
+            </div>
+            <div className="mt-6 pt-5 border-t border-slate-50">
+                <div className="text-sm text-slate-600 leading-relaxed mb-4 font-medium" dangerouslySetInnerHTML={{__html: item.desc || ''}}></div>
+                {item.tips && (
+                    <div className="text-[11px] font-bold text-amber-800 bg-amber-50 p-4 rounded-2xl border border-amber-100 flex items-start mb-4">
+                        <i className="fas fa-lightbulb mr-3 mt-0.5 text-amber-500 text-sm"></i>
+                        <span className="leading-relaxed">{item.tips}</span>
+                    </div>
+                )}
+                <NaverButton url={item.naverLink} query={item.mapQuery} address={item.address} />
+            </div>
+          </div>
+        );
+      };
+
+      const DiscoveryCard = ({ data }) => (
+        <div className="bg-gradient-to-br from-slate-700 to-slate-800 text-white rounded-[24px] p-6 mb-6 shadow-xl relative overflow-hidden group">
+          <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="relative z-10">
+            <div className="text-xs font-bold text-blue-200 uppercase tracking-widest mb-2 flex items-center">
+               <i className="fas fa-compass mr-2 animate-pulse"></i> 探索周邊
+            </div>
+            <h3 className="text-2xl font-black mb-2">{data.title}</h3>
+            <p className="text-sm text-slate-300 leading-relaxed font-light mb-4">{data.desc}</p>
+            <div className="space-y-3">
+              {data.spots.map((s, i) => (
+                <div key={i} className="bg-white/10 rounded-xl p-3 backdrop-blur-sm border border-white/10 flex items-start">
+                   <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-200 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                     <i className="fas fa-map-marker-alt text-xs"></i>
+                   </div>
+                   <div>
+                     <div className="font-bold text-base text-white">{s.name}</div>
+                     {s.desc && <div className="text-xs text-slate-400 mt-0.5">{s.desc}</div>}
+                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+
+      const Header = ({ activeDate, setActiveDate }) => {
+        const data = TRIP_DATA[activeDate];
+        return (
+          <div className="sticky top-0 z-40 bg-[#F2FAFC]/95 backdrop-blur-md border-b border-slate-200/60 shadow-sm transition-all duration-300">
+            <div className="pt-12 pb-2 px-6">
+              <div className="text-[10px] font-black text-blue-600 tracking-[0.4em] uppercase mb-1.5 opacity-80">SEOUL SKI 2025</div>
+              <div className="flex justify-between items-end mb-4">
+                <h1 className="text-3xl font-black text-slate-900 leading-none tracking-tighter">{data.title.split(' / ')[1] || data.title}</h1>
+                <div className="flex flex-col items-end text-right">
+                  <div className="text-2xl text-slate-700"><i className={`fas ${data.weather.i}`}></i></div>
+                  <div className="text-[11px] font-black text-slate-400 mt-1 uppercase">{data.weather.t}</div>
+                </div>
+              </div>
+            </div>
+            <div className="flex overflow-x-auto hide-scrollbar space-x-4 px-6 py-10 snap-x snap-mandatory">
+              {Object.keys(TRIP_DATA).map((date) => {
+                const tripDay = TRIP_DATA[date];
+                const d = new Date(date);
+                const isActive = date === activeDate;
+                return (
+                  <button key={date} onClick={() => setActiveDate(date)} className={`snap-start flex-shrink-0 flex flex-col items-center justify-center w-[4.5rem] h-24 rounded-[28px] cursor-pointer transition-all duration-300 border-2 ${isActive ? 'bg-slate-900 text-white shadow-2xl scale-110 border-transparent z-10' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-200'}`}>
+                    <span className={`text-[9px] uppercase font-black tracking-widest mb-1 ${isActive ? 'opacity-50' : 'opacity-40'}`}>{d.toLocaleDateString("en-US", { weekday: "short" })}</span>
+                    <span className="text-2xl font-black font-mono leading-none mb-1">{d.getDate()}</span>
+                    <i className={`fas ${tripDay.weather.i} text-[9px] ${isActive ? 'opacity-100 text-blue-300' : 'opacity-0'}`}></i>
+                  </button>
+                );
+              })}
+              <div className="w-8 flex-shrink-0" />
+            </div>
+          </div>
+        );
+      };
+
+      const Navigation = ({ activeTab, setActiveTab }) => {
+        const navItems = [
+          { id: 'itinerary', icon: 'fa-map', label: '行程' },
+          { id: 'accounting', icon: 'fa-wallet', label: '記帳' },
+          { id: 'translate', icon: 'fa-language', label: '翻譯' },
+          { id: 'tools', icon: 'fa-suitcase', label: '工具' },
+        ];
+        return (
+          <nav className="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-slate-200 z-50 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+            <div className="flex justify-around items-center h-16">
+              {navItems.map((item) => (
+                <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-all duration-200 ${activeTab === item.id ? 'text-blue-600 scale-105' : 'text-slate-400 hover:text-slate-600'}`}>
+                  <i className={`fas ${item.icon} text-xl mb-0.5`}></i>
+                  <span className="text-[10px] font-bold tracking-wide">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </nav>
+        );
+      };
+
+      const ItineraryView = ({ activeDate }) => {
+        const dayData = TRIP_DATA[activeDate];
+        return (
+          <div className="pb-8 animate-fade-in">
+            {dayData.discovery && <DiscoveryCard data={dayData.discovery} />}
+            {dayData.items.map((item, index) => {
+              switch (item.type) {
+                case 'flight': return <BoardingPass key={index} item={item} />;
+                case 'snack': return <SnackCard key={index} item={item} />;
+                case 'transit': return <TransitCard key={index} item={item} />;
+                case 'list': return <ListCard key={index} item={item} />;
+                default: return <StandardCard key={index} item={item} />;
+              }
+            })}
+          </div>
+        );
+      };
+
+      const AccountingView = () => {
+        const [expenses, setExpenses] = useState([]);
+        const [name, setName] = useState('');
+        const [amount, setAmount] = useState('');
+        const [curr, setCurr] = useState('KRW');
+        useEffect(() => {
+          const saved = localStorage.getItem('ski_exp_final_v6');
+          if (saved) setExpenses(JSON.parse(saved));
+        }, []);
+        const save = (updated) => { setExpenses(updated); localStorage.setItem('ski_exp_final_v6', JSON.stringify(updated)); };
+        const add = (who) => {
+          if (!name || !amount) return;
+          save([...expenses, { id: Date.now(), i: name, a: amount, w: who, c: curr }]);
+          setName(''); setAmount('');
+        };
+        const remove = (id) => { if (window.confirm('確定刪除?')) save(expenses.filter(e => e.id !== id)); };
+        const total = expenses.reduce((acc, e) => acc + parseInt(e.a || '0'), 0);
+        const paidMe = expenses.filter(e => e.w === 'me').reduce((acc, e) => acc + parseInt(e.a || '0'), 0);
+        const diff = paidMe - (total / 2);
+        return (
+          <div className="pb-10 animate-fade-in">
+            <h2 className="text-3xl font-black text-slate-900 mb-6 px-2 tracking-tighter">分帳記帳</h2>
+            <div className="bg-slate-900 text-white p-8 rounded-[40px] mb-8 shadow-2xl relative overflow-hidden">
+              <div className="text-[10px] text-slate-400 font-black uppercase mb-2">總支出 (₩)</div>
+              <div className="text-5xl font-black mb-8 font-mono tracking-tighter">₩{total.toLocaleString()}</div>
+              <div className={`text-center py-4 rounded-2xl text-sm font-black border ${diff > 0 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : diff < 0 ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-slate-500/10 text-slate-400'}`}>
+                {diff > 0 ? `杯茛 需給你 ₩${Math.abs(diff).toLocaleString()}` : diff < 0 ? `你 需給杯茛 ₩${Math.abs(diff).toLocaleString()}` : '金額已結清'}
+              </div>
+            </div>
+            <div className="bg-white p-7 rounded-[32px] border border-slate-200 shadow-sm mb-8">
+              <input value={name} onChange={e => setName(e.target.value)} placeholder="項目" className="w-full p-4 rounded-2xl bg-slate-50 mb-4 text-sm font-bold outline-none" />
+              <div className="flex gap-3 mb-6">
+                <select value={curr} onChange={e => setCurr(e.target.value)} className="p-4 rounded-2xl bg-slate-50 text-sm font-black border-none outline-none"><option value="KRW">₩ KRW</option><option value="TWD">NT$ TWD</option></select>
+                <input type="number" value={amount} onChange={e => setAmount(e.target.value)} placeholder="金額" className="flex-1 p-4 rounded-2xl bg-slate-50 text-sm font-black outline-none" />
+              </div>
+              <div className="flex gap-3">
+                <button onClick={() => add('me')} className="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm">我先付</button>
+                <button onClick={() => add('cup')} className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-sm">杯茛先付</button>
+              </div>
+            </div>
+            <div className="space-y-3">
+              {expenses.slice().reverse().map(e => (
+                <div key={e.id} className="flex justify-between items-center bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-black ${e.w === 'me' ? 'bg-slate-900 text-white' : 'bg-blue-100 text-blue-600'}`}>{e.w === 'me' ? '我' : '杯'}</div>
+                    <div><div className="font-black text-slate-800 text-sm">{e.i}</div><div className="text-[10px] text-slate-400 uppercase tracking-widest">{e.w === 'me' ? 'Paid by me' : 'Paid by Cup'}</div></div>
+                  </div>
+                  <div className="flex items-center gap-5">
+                    <div className="font-black text-slate-900 font-mono text-lg">{e.c === 'TWD' ? 'NT$' : '₩'}{parseInt(e.a).toLocaleString()}</div>
+                    <button onClick={() => remove(e.id)} className="text-slate-200 hover:text-red-500 transition-colors p-2"><i className="fas fa-times-circle"></i></button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      const TranslationView = () => {
+        const play = (text) => {
+          if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'ko-KR';
+            u.rate = 0.9;
+            window.speechSynthesis.speak(u);
           }
         };
+        return (
+          <div className="pb-10 animate-fade-in">
+            <h2 className="text-3xl font-black text-slate-900 mb-8 px-2 tracking-tighter">常用翻譯</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {PHRASES.map((p, i) => (
+                <button key={i} onClick={() => play(p.k)} className="bg-white p-6 rounded-[32px] border border-slate-200 text-center active:scale-95 transition-all h-44 flex flex-col justify-center items-center shadow-sm group">
+                  <div className="text-2xl font-black text-slate-800 mb-3 group-hover:text-blue-600">{p.k}</div>
+                  <div className="text-[10px] text-rose-500 font-black uppercase tracking-[0.2em] mb-4 bg-rose-50 px-3 py-1 rounded-full border border-rose-100">{p.p}</div>
+                  <div className="text-sm text-slate-500 font-bold">{p.m}</div>
+                  <div className="mt-3 text-[10px] text-slate-300 font-black flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"><i className="fas fa-volume-up"></i> CLICK</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      };
 
-        const PHRASES = [
-            { k: "안녕하세요", p: "An-nyeong-ha-se-yo", m: "你好 (Hello)" },
-            { k: "감사합니다", p: "Gam-sa-ham-ni-da", m: "謝謝 (Thank you)" },
-            { k: "얼마예요?", p: "Eol-ma-ye-yo?", m: "多少錢? (How much?)" },
-            { k: "화장실 어디예요?", p: "Hwa-jang-sil eo-di-ye-yo?", m: "廁所在哪? (Where is toilet?)" },
-            { k: "이거 주세요", p: "I-geo ju-se-yo", m: "請給我這個 (This one please)" },
-            { k: "물 주세요", p: "Mul ju-se-yo", m: "請給我水 (Water please)" },
-            { k: "영수증 주세요", p: "Yeong-su-jeung ju-se-yo", m: "請給我收據 (Receipt please)" },
-            { k: "맛있어요", p: "Ma-si-sseo-yo", m: "好吃 (Delicious)" }
-        ];
-
-        const INITIAL_CHECKLIST = [
-            { title: "證件與錢財", items: ["護照 (效期)", "機票", "現金", "信用卡", "旅遊保險單"] }, 
-            { title: "滑雪裝備", items: ["厚滑雪襪", "發熱衣褲", "防水手套", "毛帽", "圍脖"] }, 
-            { title: "電子用品", items: ["韓國轉接頭", "行動電源", "SIM卡"] }, 
-            { title: "個人物品", items: [] }
-        ];
-
-        // --- 元件整合 ---
-
-        const NaverButton = ({ url, query, address }) => {
-            const finalUrl = url || (query || address ? `https://map.naver.com/v5/search/${encodeURIComponent(query || address || '')}` : null);
-            if (!finalUrl) return null;
-            return (
-                <a href={finalUrl} target="_blank" rel="noreferrer" className="flex items-center justify-center bg-[#03C75A] text-white font-bold rounded-xl p-3 mt-4 text-sm w-full active:opacity-90 shadow-sm transition-all">
-                    <span className="font-black text-lg mr-2 font-serif">N</span> 開啟 Naver Map 導航
-                </a>
-            );
+      const ToolsView = () => {
+        const [rate, setRate] = useState(43);
+        const [krw, setKrw] = useState('');
+        const [tax, setTax] = useState('');
+        const [checklist, setChecklist] = useState([
+          { title: "證件與錢財", items: ["護照 (檢查效期 >6個月)", "機票 (電子/紙本)", "現金 (韓幣)", "信用卡", "旅遊保險單"] }, 
+          { title: "滑雪裝備", items: ["保暖長襪", "發熱衣褲", "防水手套", "毛帽", "圍脖"] }, 
+          { title: "電子用品", items: ["轉接頭", "行動電源", "充電線", "SIM卡"] }, 
+          { title: "個人物品", items: ["私人藥物", "保濕乳液/護唇膏"] }
+        ]);
+        const [checked, setChecked] = useState([]);
+        const [newItem, setNewItem] = useState('');
+        useEffect(() => {
+          const savedRate = localStorage.getItem('ski_rate'); if (savedRate) setRate(parseFloat(savedRate));
+          const savedList = localStorage.getItem('ski_checklist_v2'); if (savedList) setChecklist(JSON.parse(savedList));
+          const savedChecked = localStorage.getItem('ski_checked_v2'); if (savedChecked) setChecked(JSON.parse(savedChecked));
+        }, []);
+        const saveChecklist = (l, c) => { localStorage.setItem('ski_checklist_v2', JSON.stringify(l)); localStorage.setItem('ski_checked_v2', JSON.stringify(c)); };
+        const toggle = (item) => {
+          const newChecked = checked.includes(item) ? checked.filter(i => i !== item) : [...checked, item];
+          setChecked(newChecked); saveChecklist(checklist, newChecked);
         };
-
-        const TagPill = ({ text }) => {
-            const isAlert = text.includes("必") || text.includes("注") || text.includes("金") || text.includes("重") || text.includes("遲");
-            return <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold mr-1 mb-1 border ${isAlert ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-blue-50 text-blue-600 border-blue-100'}`}>{text}</span>;
+        const addItem = () => {
+          if (!newItem.trim()) return;
+          const newList = [...checklist]; newList[newList.length-1].items.push(newItem.trim());
+          setChecklist(newList); saveChecklist(newList, checked); setNewItem('');
         };
-
-        const BoardingPass = ({ item }) => (
-            <div className="bg-white rounded-[24px] shadow-sm mb-6 border border-slate-200 overflow-hidden">
-                <div className="px-6 py-3 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
-                    <span className="text-[10px] font-bold tracking-widest opacity-50 uppercase">Boarding Pass</span>
-                    <span className="font-bold text-xs text-slate-700">{item.airline}</span>
-                </div>
-                <div className="p-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="text-3xl font-black">{item.from}</div>
-                        <div className="flex-1 flex flex-col items-center px-4"><i className="fas fa-plane text-slate-300 text-xs transform rotate-90 mb-1"></i><div className="w-full h-px bg-slate-200"></div></div>
-                        <div className="text-3xl font-black text-blue-600">{item.to}</div>
-                    </div>
-                    <div className="flex justify-between text-[11px] font-mono font-bold text-slate-400">
-                        <div>DEP: {item.fromTime || '--:--'}</div>
-                        <div>{item.code}</div>
-                        <div>ARR: {item.toTime || '--:--'}</div>
-                    </div>
-                </div>
-            </div>
-        );
-
-        const TransitCard = ({ item }) => (
-            <div className="bg-white border border-slate-200 rounded-[20px] p-5 mb-4 shadow-sm">
-                <div className="flex justify-between items-center mb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                    <div><i className="fas fa-route mr-1"></i> 交通方式</div>
-                    <div className="text-slate-600">{item.from} ➜ {item.to}</div>
-                </div>
-                {item.steps?.map((step, idx) => (
-                    <div key={idx} className="flex gap-4 relative pb-5 last:pb-0">
-                        {idx !== item.steps.length - 1 && <div className="absolute left-[9px] top-5 bottom-0 w-0.5 bg-slate-100"></div>}
-                        <div className={`w-5 h-5 rounded-full z-10 border-4 border-white shadow-sm flex-shrink-0 ${step.color || 'bg-slate-300'}`}></div>
-                        <div className="flex-1 -mt-1">
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className={`text-[10px] font-black text-white px-1.5 py-0.5 rounded shadow-sm ${step.color || 'bg-slate-400'}`}>{step.name}</span>
-                                <span className="text-sm font-bold text-slate-800">{step.desc}</span>
-                            </div>
-                            {step.time && <div className="text-[10px] text-slate-400 font-bold"><i className="fas fa-clock mr-1"></i>{step.time}</div>}
-                        </div>
-                    </div>
-                ))}
-            </div>
-        );
-
-        const SnackCard = ({ item }) => (
-            <div className="bg-slate-800 text-slate-200 rounded-[24px] p-6 mb-6 shadow-xl relative overflow-hidden">
-                <div className="text-[10px] font-black text-indigo-300 uppercase tracking-widest mb-4 flex items-center relative z-10"><i className="fas fa-moon mr-2"></i> 深夜補給 & 宵夜</div>
-                <div className="space-y-4 relative z-10">
-                    {item.items?.map((s, idx) => (
-                        <div key={idx} className="flex items-start border-b border-white/5 pb-3 last:border-0 last:pb-0">
-                            <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center mr-3 flex-shrink-0"><i className="fas fa-utensils text-yellow-500 text-xs"></i></div>
-                            <div><div className="font-bold text-white text-sm">{typeof s === 'string' ? s : s.name}</div><div className="text-xs text-slate-400 mt-0.5">{s.desc}</div></div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-
-        const ListCard = ({ item }) => (
-            <div className="bg-white rounded-[24px] p-6 mb-4 border border-slate-100 shadow-sm">
-                <div className="flex justify-between items-center mb-2">
-                    <div className="text-xs font-mono font-bold text-slate-400">{item.time}</div>
-                    <div className="flex gap-1">{item.tags?.map((tag, idx) => <TagPill key={idx} text={tag} />)}</div>
-                </div>
-                <h3 className="text-xl font-black text-slate-900 mb-4">{item.title}</h3>
-                <ul className="space-y-3 mb-4">
-                    {item.list?.map((li, idx) => (
-                        <li key={idx} className="flex items-start text-sm text-slate-600 pl-4 relative leading-relaxed">
-                            <span className="absolute left-0 top-2.5 w-1.5 h-1.5 bg-blue-500/30 rounded-full"></span>
-                            <span dangerouslySetInnerHTML={{__html: li}}></span>
-                        </li>
-                    ))}
-                </ul>
-                <NaverButton url={item.naverLink} />
-            </div>
-        );
-
-        const StandardCard = ({ item }) => {
-            const icons = { transport: "fa-train", hotel: "fa-bed", food: "fa-utensils", activity: "fa-person-skiing", shopping: "fa-bag-shopping" };
-            return (
-                <div className="bg-white rounded-[24px] p-6 mb-4 border border-slate-100 shadow-sm active:scale-[0.98] transition-all">
-                    <div className="flex gap-4 mb-4">
-                        <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-blue-500 border border-slate-100"><i className={`fas ${icons[item.type] || 'fa-circle'} text-xl`}></i></div>
-                        <div className="flex-1">
-                            <div className="text-xs font-mono text-slate-400 font-bold">{item.time}</div>
-                            <h3 className="text-lg font-black text-slate-900 leading-tight">{item.title}</h3>
-                            <div className="text-xs text-slate-500 font-medium mt-0.5">{item.sub || item.subtitle}</div>
-                        </div>
-                    </div>
-                    {item.desc && <p className="text-sm text-slate-600 mb-4 leading-relaxed" dangerouslySetInnerHTML={{__html: item.desc}}></p>}
-                    <div className="flex flex-wrap mb-2">{item.tags?.map((tag, idx) => <TagPill key={idx} text={tag} />)}</div>
-                    {item.tips && <div className="text-[11px] text-amber-700 bg-amber-50 p-3 rounded-xl border border-amber-100 flex items-start mb-3"><i className="fas fa-lightbulb mr-2 mt-0.5 text-amber-500"></i><span className="leading-normal font-medium">{item.tips}</span></div>}
-                    <NaverButton url={item.naverLink} query={item.mapQuery} address={item.address} />
-                </div>
-            );
+        const removeItem = (gi, ii) => {
+          const newList = [...checklist]; newList[gi].items.splice(ii, 1);
+          setChecklist(newList); saveChecklist(newList, checked);
         };
-
-        const ItineraryView = ({ activeDate }) => {
-            const data = TRIP_DATA[activeDate];
-            return (
-                <div className="pb-10 animate-[fadeIn_0.3s_ease-out]">
-                    {data.discovery && (
-                        <div className="bg-gradient-to-br from-slate-700 to-slate-800 text-white rounded-[28px] p-7 mb-8 shadow-xl overflow-hidden relative group">
-                            <div className="relative z-10">
-                                <div className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-3"><i className="fas fa-compass mr-2"></i> 探索周邊 DISCOVERY</div>
-                                <h3 className="text-2xl font-black mb-3">{data.discovery.title}</h3>
-                                <p className="text-xs text-slate-400 mb-6 leading-relaxed font-medium">{data.discovery.desc}</p>
-                                <div className="space-y-3">
-                                    {data.discovery.spots.map((s, i) => (
-                                        <div key={i} className="bg-white/5 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex items-center">
-                                            <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center mr-3 flex-shrink-0"><i className="fas fa-map-pin text-blue-400 text-[10px]"></i></div>
-                                            <div><div className="font-black text-white text-sm">{s.name}</div><div className="text-[10px] text-slate-400 mt-0.5">{s.desc}</div></div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
+        return (
+          <div className="pb-10 space-y-8 animate-fade-in">
+            <h2 className="text-3xl font-black text-slate-900 px-2 tracking-tighter">旅行工具</h2>
+            <div className="bg-slate-900 text-white p-8 rounded-[40px] shadow-2xl relative overflow-hidden">
+              <div className="text-[10px] font-black text-slate-500 uppercase mb-4">匯率換算 (1:{rate})</div>
+              <div className="flex items-center gap-5 mb-8">
+                <input type="number" value={krw} onChange={e => setKrw(e.target.value)} placeholder="₩ 韓幣" className="w-1/2 bg-white/5 border border-white/10 p-5 rounded-[24px] text-xl font-black font-mono outline-none" />
+                <i className="fas fa-arrow-right text-slate-600 text-xs"></i>
+                <div className="w-1/2 text-right">
+                  <div className="text-[10px] text-slate-500 mb-1">台幣估計</div>
+                  <div className="text-3xl font-black text-emerald-400 font-mono tracking-tighter">NT$ {krw ? Math.round(parseInt(krw)/rate).toLocaleString() : 0}</div>
+                </div>
+              </div>
+              <div className="pt-6 border-t border-white/5 flex justify-between items-center">
+                 <input type="number" value={tax} onChange={e => setTax(e.target.value)} placeholder="消費金額" className="bg-white/5 border border-white/10 text-sm p-3 rounded-xl outline-none w-32 font-bold" />
+                 <div className="text-blue-400 font-black text-lg font-mono">退稅估計: ₩{tax ? Math.floor(parseFloat(tax)*0.065).toLocaleString() : 0}</div>
+              </div>
+            </div>
+            <section>
+              <div className="flex justify-between items-end mb-4 px-2">
+                  <h3 className="text-xl font-black text-slate-900">行李清單</h3>
+                  <span className="text-[10px] font-black text-slate-400 uppercase">{checked.length} 完成</span>
+              </div>
+              <div className="bg-white p-4 rounded-[28px] shadow-sm border border-slate-200 mb-6 flex gap-3">
+                <input value={newItem} onChange={e => setNewItem(e.target.value)} placeholder="需要帶什麼..." className="flex-1 bg-slate-50 p-4 rounded-2xl text-sm font-bold outline-none" />
+                <button onClick={addItem} className="bg-slate-900 text-white px-6 rounded-2xl font-black text-sm">加入</button>
+              </div>
+              <div className="space-y-4">
+                {checklist.map((group, gi) => (
+                  <div key={gi} className="bg-white p-7 rounded-[32px] border border-slate-100 shadow-sm overflow-hidden relative">
+                    <h4 className="font-black text-slate-400 text-[10px] mb-5 uppercase tracking-[0.2em]">{group.title}</h4>
                     <div className="space-y-4">
-                        {data.items.map((item, idx) => {
-                            if (item.type === 'flight') return <BoardingPass key={idx} item={item} />;
-                            if (item.type === 'transit') return <TransitCard key={idx} item={item} />;
-                            if (item.type === 'snack') return <SnackCard key={idx} item={item} />;
-                            if (item.type === 'list') return <ListCard key={idx} item={item} />;
-                            return <StandardCard key={idx} item={item} />;
-                        })}
-                    </div>
-                </div>
-            );
-        };
-
-        const AccountingView = () => {
-            const [expenses, setExpenses] = useState([]);
-            const [name, setName] = useState('');
-            const [amount, setAmount] = useState('');
-            const [curr, setCurr] = useState('KRW');
-
-            useEffect(() => {
-                const saved = localStorage.getItem('ski_exp_final_v6');
-                if (saved) setExpenses(JSON.parse(saved));
-            }, []);
-
-            const add = (who) => {
-                if (!name || !amount) return;
-                const updated = [...expenses, { id: Date.now(), i: name, a: parseInt(amount), w: who, c: curr }];
-                setExpenses(updated);
-                localStorage.setItem('ski_exp_final_v6', JSON.stringify(updated));
-                setName(''); setAmount('');
-            };
-
-            const remove = (id) => {
-                const updated = expenses.filter(e => e.id !== id);
-                setExpenses(updated);
-                localStorage.setItem('ski_exp_final_v6', JSON.stringify(updated));
-            }
-
-            const total = expenses.reduce((acc, e) => acc + e.a, 0);
-            const paidMe = expenses.filter(e => e.w === 'me').reduce((acc, e) => acc + e.a, 0);
-            const paidCup = expenses.filter(e => e.w === 'cup').reduce((acc, e) => acc + e.a, 0);
-            const diff = paidMe - (total / 2);
-
-            return (
-                <div className="pb-10 animate-[fadeIn_0.3s_ease-out]">
-                    <h2 className="text-3xl font-black mb-6 px-2">分帳記帳</h2>
-                    <div className="bg-slate-900 text-white p-7 rounded-[32px] mb-8 shadow-2xl relative overflow-hidden">
-                        <div className="text-[10px] text-slate-400 font-black uppercase mb-2 relative z-10 tracking-widest">總支出 (₩)</div>
-                        <div className="text-4xl font-black mb-8 relative z-10">₩{total.toLocaleString()}</div>
-                        <div className={`text-center py-4 rounded-2xl text-sm font-black relative z-10 border ${diff > 0 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : diff < 0 ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-slate-500/10 text-slate-400'}`}>
-                            {diff > 0 ? `對方 需給你 ₩${Math.abs(diff).toLocaleString()}` : diff < 0 ? `你 需給對方 ₩${Math.abs(diff).toLocaleString()}` : '目前金額結清'}
-                        </div>
-                    </div>
-                    <div className="bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm mb-8">
-                        <input value={name} onChange={e => setName(e.target.value)} placeholder="項目" className="w-full p-4 rounded-2xl bg-slate-50 mb-4 text-sm font-bold outline-none border border-transparent focus:border-blue-500" />
-                        <div className="flex gap-3 mb-6">
-                            <select value={curr} onChange={e => setCurr(e.target.value)} className="p-4 rounded-2xl bg-slate-50 text-sm font-black border border-transparent outline-none"><option value="KRW">₩</option><option value="TWD">NT$</option></select>
-                            <input type="number" value={amount} onChange={e => setAmount(e.target.value)} placeholder="金額" className="flex-1 p-4 rounded-2xl bg-slate-50 text-sm font-black outline-none border border-transparent focus:border-blue-500" />
-                        </div>
-                        <div className="flex gap-3">
-                            <button onClick={() => add('me')} className="flex-1 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm active:scale-95">我先付</button>
-                            <button onClick={() => add('cup')} className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-sm active:scale-95">對方付</button>
-                        </div>
-                    </div>
-                    <div className="space-y-3">
-                        {expenses.slice().reverse().map(e => (
-                            <div key={e.id} className="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black ${e.w === 'me' ? 'bg-slate-900 text-white' : 'bg-blue-100 text-blue-600'}`}>{e.w === 'me' ? '我' : '他'}</div>
-                                    <div className="font-bold text-slate-700 text-sm">{e.i}</div>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <div className="font-black text-slate-900">{e.c === 'TWD' ? 'NT$' : '₩'}{e.a.toLocaleString()}</div>
-                                    <button onClick={() => remove(e.id)} className="text-slate-200 hover:text-red-400"><i className="fas fa-times-circle"></i></button>
-                                </div>
+                      {group.items.map((item, ii) => {
+                        const isChecked = checked.includes(item);
+                        return (
+                          <div key={ii} onClick={() => toggle(item)} className="flex justify-between items-center py-1 cursor-pointer group">
+                            <div className="flex items-center gap-4">
+                              <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${isChecked ? 'bg-blue-600 border-blue-600 shadow-md scale-95' : 'border-slate-200 group-hover:border-slate-300'}`}>
+                                {isChecked && <i className="fas fa-check text-white text-[10px]"></i>}
+                              </div>
+                              <span className={`text-sm font-bold transition-all ${isChecked ? 'text-slate-300 line-through' : 'text-slate-700'}`}>{item}</span>
                             </div>
-                        ))}
+                            <button onClick={e => { e.stopPropagation(); removeItem(gi, ii); }} className="text-slate-200 hover:text-rose-500 p-2"><i className="fas fa-trash-alt text-sm"></i></button>
+                          </div>
+                        );
+                      })}
                     </div>
-                </div>
-            );
-        };
-
-        const TranslationView = () => (
-            <div className="pb-10 animate-[fadeIn_0.3s_ease-out]">
-                <h2 className="text-3xl font-black mb-8 px-2 tracking-tighter">常用翻譯</h2>
-                <div className="grid grid-cols-2 gap-4">
-                    {PHRASES.map((p, i) => (
-                        <button key={i} onClick={() => { if('speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(p.k); u.lang='ko-KR'; window.speechSynthesis.speak(u); }}} className="bg-white p-6 rounded-[32px] border border-slate-200 text-center active:scale-95 h-40 flex flex-col justify-center items-center shadow-sm">
-                            <div className="text-2xl font-black text-slate-800 mb-2">{p.k}</div>
-                            <div className="text-[10px] text-red-500 font-black uppercase tracking-widest mb-3 bg-red-50 px-2 py-0.5 rounded-full">{p.p}</div>
-                            <div className="text-sm text-slate-500 font-bold">{p.m}</div>
-                        </button>
-                    ))}
-                </div>
-            </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
         );
+      };
 
-        const ToolsView = () => {
-            const [rate, setRate] = useState(43);
-            const [krw, setKrw] = useState('');
-            const [taxInput, setTaxInput] = useState('');
-            const [checklist, setChecklist] = useState(INITIAL_CHECKLIST);
-            const [checkedItems, setCheckedItems] = useState([]);
-            const [newItem, setNewItem] = useState('');
+      const App = () => {
+        const [activeTab, setActiveTab] = useState('itinerary');
+        const [activeDate, setActiveDate] = useState(Object.keys(TRIP_DATA)[0]);
+        useEffect(() => { window.scrollTo(0, 0); }, [activeDate, activeTab]);
+        return (
+          <div className="min-h-screen bg-[#F2FAFC] text-slate-800 font-sans pb-24">
+            {activeTab === 'itinerary' && (
+              <>
+                <Header activeDate={activeDate} setActiveDate={setActiveDate} />
+                <main className="px-4 pt-4"><ItineraryView activeDate={activeDate} /></main>
+              </>
+            )}
+            {activeTab !== 'itinerary' && (
+              <main className="px-4 pt-12">
+                 {activeTab === 'accounting' && <AccountingView />}
+                 {activeTab === 'translate' && <TranslationView />}
+                 {activeTab === 'tools' && <ToolsView />}
+              </main>
+            )}
+            <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+          </div>
+        );
+      };
 
-            useEffect(() => {
-              const savedRate = localStorage.getItem('ski_rate');
-              if (savedRate) setRate(parseFloat(savedRate));
-              const savedList = localStorage.getItem('ski_checklist_data_v2');
-              if (savedList) setChecklist(JSON.parse(savedList));
-              const savedChecked = localStorage.getItem('ski_checklist_checked_v2');
-              if (savedChecked) setCheckedItems(JSON.parse(savedChecked));
-            }, []);
-
-            const updateChecklist = (newList) => { setChecklist(newList); localStorage.setItem('ski_checklist_data_v2', JSON.stringify(newList)); };
-            const updateChecked = (newChecked) => { setCheckedItems(newChecked); localStorage.setItem('ski_checklist_checked_v2', JSON.stringify(newChecked)); };
-            const toggleCheck = (item) => { if (checkedItems.includes(item)) updateChecked(checkedItems.filter(i => i !== item)); else updateChecked([...checkedItems, item]); };
-            const addItem = () => { if (!newItem.trim()) return; const newList = [...checklist]; let personalGroup = newList.find(g => g.title === "個人物品"); if (!personalGroup) { personalGroup = { title: "個人物品", items: [] }; newList.push(personalGroup); } personalGroup.items.push(newItem.trim()); updateChecklist(newList); setNewItem(''); };
-            const removeItem = (gi, ii) => { if (window.confirm('移除項目?')) { const newList = [...checklist]; const itemToRemove = newList[gi].items[ii]; newList[gi].items.splice(ii, 1); updateChecklist(newList); if (checkedItems.includes(itemToRemove)) updateChecked(checkedItems.filter(i => i !== itemToRemove)); } };
-
-            return (
-                <div className="pb-10 space-y-8 animate-[fadeIn_0.3s_ease-out]">
-                    <h2 className="text-3xl font-black px-2">旅行工具</h2>
-                    <div className="bg-slate-900 text-white p-8 rounded-[40px] shadow-2xl relative overflow-hidden">
-                        <div className="flex justify-between items-center mb-6"><div className="text-[10px] font-black text-slate-500 tracking-widest uppercase">匯率換算 (1:{rate})</div></div>
-                        <div className="flex items-center gap-4">
-                            <input type="number" value={krw} onChange={e => setKrw(e.target.value)} placeholder="₩ 韓幣" className="w-1/2 bg-white/5 border border-white/10 p-5 rounded-[24px] text-xl font-black outline-none focus:bg-white/10" />
-                            <div className="text-slate-600"><i className="fas fa-arrow-right text-xl"></i></div>
-                            <div className="w-1/2 text-right">
-                                <div className="text-3xl font-black text-emerald-400 tracking-tighter">NT$ {krw ? Math.round(parseInt(krw)/rate).toLocaleString() : 0}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <section>
-                        <h3 className="text-xl font-black px-2 mb-4">行李清單</h3>
-                        <div className="bg-white p-4 rounded-3xl shadow-sm border border-slate-200 mb-6 flex gap-2">
-                            <input value={newItem} onChange={e => setNewItem(e.target.value)} placeholder="新增項目..." className="flex-1 bg-slate-50 p-3 rounded-2xl text-sm outline-none" />
-                            <button onClick={addItem} className="bg-slate-900 text-white px-6 rounded-2xl font-bold">加入</button>
-                        </div>
-                        <div className="space-y-4">
-                            {checklist.map((group, gi) => (
-                                <div key={gi} className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm">
-                                    <h4 className="font-black text-slate-400 text-[10px] mb-4 uppercase tracking-widest">{group.title}</h4>
-                                    <div className="space-y-3">
-                                        {group.items.map((item, ii) => {
-                                            const isChecked = checkedItems.includes(item);
-                                            return (
-                                                <div key={ii} onClick={() => toggleCheck(item)} className="flex justify-between items-center py-1">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors ${isChecked ? 'bg-blue-500 border-blue-500' : 'border-slate-300'}`}>{isChecked && <i className="fas fa-check text-white text-[10px]"></i>}</div>
-                                                        <span className={`text-sm font-bold ${isChecked ? 'text-slate-300 line-through' : 'text-slate-700'}`}>{item}</span>
-                                                    </div>
-                                                    <button onClick={e => { e.stopPropagation(); removeItem(gi, ii); }} className="text-slate-200 hover:text-red-400"><i className="fas fa-times"></i></button>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                </div>
-            );
-        };
-
-        // --- 主程式 ---
-
-        const App = () => {
-            const [tab, setTab] = useState('itinerary');
-            const [date, setDate] = useState(Object.keys(TRIP_DATA)[0]);
-
-            useEffect(() => { window.scrollTo(0,0); }, [tab, date]);
-
-            return (
-                <div className="min-h-screen bg-[#F2FAFC] pb-24 text-slate-800">
-                    {tab === 'itinerary' && (
-                        <div className="sticky top-0 z-40 bg-[#F2FAFC]/95 backdrop-blur-md border-b border-slate-200 px-6 pt-12 pb-6">
-                            <div className="flex justify-between items-end mb-8">
-                                <div>
-                                    <div className="text-[10px] font-black text-blue-600 tracking-[0.3em] uppercase mb-1.5 opacity-80">Seoul Ski 2025</div>
-                                    <h1 className="text-4xl font-black tracking-tighter leading-none">{TRIP_DATA[date].title.split(' / ')[1]}</h1>
-                                </div>
-                                <div className="text-right flex flex-col items-end">
-                                    <i className={`fas ${TRIP_DATA[date].weather.i} text-2xl text-slate-700 mb-1`}></i>
-                                    <div className="text-[11px] font-black text-slate-400">{TRIP_DATA[date].weather.t}</div>
-                                </div>
-                            </div>
-                            <div className="flex gap-4 overflow-x-auto hide-scrollbar snap-x">
-                                {Object.keys(TRIP_DATA).map(d => (
-                                    <button key={d} onClick={() => setDate(d)} className={`flex-shrink-0 w-[4.5rem] h-24 rounded-[24px] snap-start flex flex-col items-center justify-center border-2 transition-all duration-300 ${d === date ? 'bg-slate-900 text-white border-transparent shadow-xl scale-105' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-200'}`}>
-                                        <span className={`text-[9px] font-black mb-1 uppercase tracking-wider ${d === date ? 'opacity-50' : 'opacity-40'}`}>{new Date(d).toLocaleDateString('en-US', {weekday:'short'})}</span>
-                                        <span className="text-2xl font-black font-mono leading-none">{new Date(d).getDate()}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    <main className={`px-5 ${tab === 'itinerary' ? 'pt-8' : 'pt-16'}`}>
-                        {tab === 'itinerary' && <ItineraryView activeDate={date} />}
-                        {tab === 'accounting' && <AccountingView />}
-                        {tab === 'translate' && <TranslationView />}
-                        {tab === 'tools' && <ToolsView />}
-                    </main>
-
-                    <nav className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-lg border-t border-slate-200 h-20 flex justify-around items-center px-4 pb-safe z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.03)]">
-                        {[
-                            { id: 'itinerary', icon: 'fa-map-marked-alt', label: '行程' },
-                            { id: 'accounting', icon: 'fa-wallet', label: '記帳' },
-                            { id: 'translate', icon: 'fa-language', label: '翻譯' },
-                            { id: 'tools', icon: 'fa-suitcase', label: '工具' }
-                        ].map(t => (
-                            <button key={t.id} onClick={() => setTab(t.id)} className={`flex flex-col items-center gap-1.5 w-full transition-all duration-300 ${tab === t.id ? 'text-blue-600 scale-110' : 'text-slate-300 hover:text-slate-400'}`}>
-                                <i className={`fas ${t.icon} text-xl`}></i>
-                                <span className={`text-[10px] font-black tracking-tight ${tab === t.id ? 'opacity-100' : 'opacity-60'}`}>{t.label}</span>
-                            </button>
-                        ))}
-                    </nav>
-                </div>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
     </script>
 </body>
 </html>
