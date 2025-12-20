@@ -6,6 +6,9 @@
     <meta name="theme-color" content="#1E293B" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2405/2405234.png" />
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2405/2405234.png" />
+    <link rel="manifest" href="./manifest.json" />
     <title>Seoul 2025 Ski Trip</title>
     
     <!-- Libraries -->
@@ -91,9 +94,9 @@
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
@@ -129,7 +132,7 @@
             { 
               type: "hotel", time: "00:10", title: "入住 Hotel The Designers", sub: "清涼里站 4號出口", 
               address: "226 Wangsan-ro, Dongdaemun-gu, Seoul", 
-              mapQuery: "호텔더디자이너스청량리",
+              mapQuery: "호텔더디자이너斯청량리",
               tags: ["Agoda已付"], 
               exit: "4號出口", 
               desc: "飯店就在 4 號出口步行 2 分鐘處。樓下即有便利商店。",
@@ -299,7 +302,7 @@
               tags: ["韓牛", "聖誕大餐", "1++等級"] 
             },
             { type: "activity", time: "21:00", title: "東大門夜遊", desc: "DDP 玫瑰燈海/夜景、NyuNyu 飾品總店（深夜不打烊）。" },
-            { type: "snack", title: "聖誕深夜補給", items: [ { name: "푸拉닭 (Puradak Chicken)", desc: "聖誕節首選！像精品包一樣的包裝，大推『黑蒜口味 (Black Alio)』，外酥內嫩口感絕佳。" }, { name: "東大門獵奇辣炒年糕", desc: "感受一下總店的魔鬼辣度. 聖誕夜的極限重口味補給。" } ] }
+            { type: "snack", title: "聖誕深夜補給", items: [ { name: "푸라닭 (Puradak Chicken)", desc: "聖誕節首選！像精品包一樣的包裝，大推『黑蒜口味 (Black Alio)』，外酥內嫩口感絕佳。" }, { name: "東大門獵奇辣炒年糕", desc: "感受一下總店的魔鬼辣度. 聖誕夜的極限重口味補給。" } ] }
           ] 
         },
         "2025-12-26": { 
@@ -430,7 +433,7 @@
               return (
                 <div key={idx} className="flex items-start bg-white/5 p-4 rounded-2xl border border-white/5">
                   <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center mr-4 flex-shrink-0"><i className="fas fa-utensils text-blue-300 text-[10px]"></i></div>
-                  <div className="flex-1 min-w-0"><div className="font-black text-white text-sm truncate">{name}</div>{desc && <div className="text-[11px] text-slate-400 mt-1 leading-relaxed">{desc}</div>}</div>
+                  <div className="flex-1 min-w-0"><div className="font-black text-white text-sm truncate">{name}</div>{desc && <div className="text-[11px] text-slate-400 mt-1導致 leading-relaxed">{desc}</div>}</div>
                 </div>
               )
             })}
@@ -680,10 +683,8 @@
         const fetchExchangeRate = async () => {
           setRateStatus('loading');
           try {
-            // 主要 API: Open ER API
             const res = await fetch('https://open.er-api.com/v6/latest/KRW');
             const data = await res.json();
-            
             if (data && data.rates && data.rates.TWD) {
               const rawRate = 1 / data.rates.TWD;
               const finalRate = parseFloat(rawRate.toFixed(2));
@@ -697,7 +698,6 @@
           } catch (err) {
             console.warn("First API failed, trying backup...", err);
             try {
-              // 備援 API
               const res2 = await fetch('https://api.exchangerate-api.com/v4/latest/KRW');
               const data2 = await res2.json();
               if (data2 && data2.rates && data2.rates.TWD) {
@@ -717,7 +717,7 @@
                 setRate(parseFloat(savedRate));
                 setRateStatus('fallback');
               } else {
-                setRate(43); // 終極備援
+                setRate(43);
                 setRateStatus('fallback');
               }
             }
@@ -726,7 +726,6 @@
 
         useEffect(() => {
           fetchExchangeRate();
-          
           const savedList = localStorage.getItem('ski_checklist_data_v2'); 
           if (savedList) setChecklist(JSON.parse(savedList));
           const savedChecked = localStorage.getItem('ski_checklist_checked_v2'); 
@@ -745,10 +744,8 @@
             <h2 className="text-3xl font-black text-slate-900 tracking-tighter">旅行工具</h2>
             <div className="bg-slate-900 text-white p-8 rounded-[40px] shadow-2xl relative overflow-hidden">
               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-              
               <div className="flex justify-between items-start mb-4">
                 <div className="text-[10px] font-black text-slate-500 tracking-[0.3em] uppercase">匯率換算 (1 TWD : {rate} KRW)</div>
-                
                 <button onClick={fetchExchangeRate} className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border transition-all active:scale-95 bg-white/5 border-white/10">
                   {rateStatus === 'loading' ? (
                     <i className="fas fa-spinner fa-spin text-[8px] text-blue-400"></i>
@@ -762,7 +759,6 @@
                   </span>
                 </button>
               </div>
-
               <div className="flex items-center gap-5 mb-8">
                 <input type="number" value={krw} onChange={e => setKrw(e.target.value)} placeholder="₩ 韓幣" className="w-1/2 bg-white/5 border border-white/10 p-5 rounded-[24px] text-xl font-black outline-none font-mono" />
                 <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10"><i className="fas fa-arrow-right text-slate-600 text-xs"></i></div>
@@ -771,7 +767,6 @@
                   <div className="text-3xl font-black text-emerald-400 font-mono tracking-tighter">NT$ {krw ? Math.round(parseInt(krw)/rate).toLocaleString() : 0}</div>
                 </div>
               </div>
-
               <div className="pt-6 border-t border-white/5">
                 <div className="text-[10px] font-black text-slate-500 uppercase mb-3 tracking-widest">退稅估計 (TAX REFUND)</div>
                 <div className="flex justify-between items-center">
@@ -780,7 +775,6 @@
                 </div>
               </div>
             </div>
-
             <section>
               <div className="flex justify-between items-end mb-4 px-2"><h3 className="text-xl font-black text-slate-900">行李清單</h3><span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{checked.length} / {checklist.reduce((acc, g) => acc + g.items.length, 0)} 完成</span></div>
               <div className="bg-white p-4 rounded-[28px] shadow-sm border border-slate-200 mb-6 flex gap-3"><input value={newItem} onChange={e => setNewItem(e.target.value)} placeholder="需要帶什麼..." className="flex-1 bg-slate-50 p-4 rounded-2xl text-sm font-bold outline-none" /><button onClick={addItem} className="bg-slate-900 text-white px-6 rounded-2xl font-black text-sm active:scale-95 shadow-md">加入</button></div>
